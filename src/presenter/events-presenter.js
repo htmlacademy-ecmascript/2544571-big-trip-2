@@ -13,8 +13,7 @@ export default class EventsPresenter {
   }
 
   init() {
-    console.log(this.eventsContainer)
-    render(new TripSortView(), this.eventsContainer)
+    render(new TripSortView(), this.eventsContainer);
     render(this.listComponent, this.eventsContainer);
     render(new EditPointView(), this.listComponent.getElement());
     render(new AddNewPointView(), this.listComponent.getElement());
