@@ -1,6 +1,9 @@
 import {createElement} from '../render.js';
 
-function createListPointTemplate() {
+function createPointTemplate(point) {
+
+  const {basePrice} = point; // цена в event__price-value меняется - данные дошли до вьюшки
+
   return (`<li class="trip-events__item">
               <div class="event">
                 <time class="event__date" datetime="2019-03-18">MAR 18</time>
@@ -17,7 +20,7 @@ function createListPointTemplate() {
                   <p class="event__duration">30M</p>
                 </div>
                 <p class="event__price">
-                  &euro;&nbsp;<span class="event__price-value">20</span>
+                  &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
                 </p>
                 <h4 class="visually-hidden">Offers:</h4>
                 <ul class="event__selected-offers">
@@ -41,8 +44,13 @@ function createListPointTemplate() {
 }
 
 export default class PointView {
+
+  constructor({point}) {
+    this.point = point;
+  }
+
   getTemplate() {
-    return createListPointTemplate();
+    return createPointTemplate(this.point);
   }
 
   getElement() {
