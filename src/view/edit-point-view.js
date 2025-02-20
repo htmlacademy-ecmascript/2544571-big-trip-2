@@ -9,16 +9,13 @@ function createOffersEditTemplate(checkedOffers, offersType) {
         <input class="event__offer-checkbox  visually-hidden"
         id="event-offer-luggage-1"
         type="checkbox"
-        name="event-offer-luggage" ${checkedOffers.includes(offer.id)? 'checked' : ''}>
+        name="event-offer-luggage" ${checkedOffers.includes(offer.id) ? 'checked' : ''}>
         <label class="event__offer-label" for="event-offer-luggage-1">
           <span class="event__offer-title">${offer.title}</span>
           &plus;&euro;&nbsp;
           <span class="event__offer-price">${offer.price}</span>
         </label>
       </div>`).join();
-
-  console.log(selectedTypeOffersList);
-  console.log(checkedOffers);
 
   return (`<section class="event__section  event__section--offers">
     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
