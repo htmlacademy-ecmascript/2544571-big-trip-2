@@ -1,4 +1,4 @@
-const mockOffersList = [
+const MOCK_OFFERS_LIST = [
   {
     'type': 'taxi',
     'offers': [
@@ -205,8 +205,4 @@ const mockOffersList = [
   }
 ];
 
-function getMockOffersList () {
-  return mockOffersList;
-}
-
-export {getMockOffersList};
+export {MOCK_OFFERS_LIST};
