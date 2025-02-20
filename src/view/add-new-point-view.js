@@ -1,8 +1,7 @@
 import { createElement } from '../render.js';
-import { MOCK_OFFERS_LIST } from '../mock/offers.js';
 
-function createOffersEditTemplate(checkedOffers, offersType) {
-  const selectedTypeOffersList = MOCK_OFFERS_LIST.find((offer) => offer.type === offersType).offers;
+function createOffersEditTemplate(checkedOffers, offersType , allOffers) {
+  const selectedTypeOffersList = allOffers.find((offer) => offer.type === offersType).offers;
 
   const offersElements = selectedTypeOffersList.map((offer) =>
     `<div class="event__offer-selector">
@@ -25,11 +24,15 @@ function createOffersEditTemplate(checkedOffers, offersType) {
   </section>`);
 }
 
-function createAddNewPointTemplate(point) {
+function createAddNewPointTemplate(point, offers , destinations) {
 
-  const { type, offers } = point;
+  const { type, offers: pointOffers , destination: pointDestination } = point;
 
-  const editOffersTemplate = createOffersEditTemplate(offers, type);
+  const selectedDestination = destinations.find((x) => x.id === pointDestination);
+
+  const editOffersTemplate = createOffersEditTemplate(pointOffers, type , offers);
+
+  const destinationName = selectedDestination.name;
 
   return (
     `<li class="trip-events__item">
@@ -98,7 +101,7 @@ function createAddNewPointTemplate(point) {
       <label class="event__label  event__type-output" for="event-destination-1">
         Flight
       </label>
-      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="Geneva" list="destination-list-1">
+      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationName}" list="destination-list-1">
       <datalist id="destination-list-1">
         <option value="Amsterdam"></option>
         <option value="Geneva"></option>
@@ -149,12 +152,14 @@ function createAddNewPointTemplate(point) {
 
 export default class AddNewPointView {
 
-  constructor({point}) {
+  constructor({ point , offers , destinations }) {
     this.point = point;
+    this.offers = offers;
+    this.destinations = destinations;
   }
 
   getTemplate() {
-    return createAddNewPointTemplate(this.point);
+    return createAddNewPointTemplate(this.point, this.offers, this.destinations);
   }
 
   getElement() {

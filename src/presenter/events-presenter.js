@@ -8,21 +8,23 @@ import {render} from '../render.js';
 export default class EventsPresenter {
   listComponent = new TripEventsListView();
 
-  constructor({eventsContainer, pointsModel}) {
+  constructor({eventsContainer, eventsModel}) {
     this.eventsContainer = eventsContainer;
-    this.pointsModel = pointsModel;
+    this.eventsModel = eventsModel;
   }
 
   init() {
-    this.EventsPoints = [...this.pointsModel.getPoints()];
+    this.eventsPoints = [...this.eventsModel.getPoints()];
+    this.offers = this.eventsModel.getOffers();
+    this.destinations = this.eventsModel.getDestinations();
 
     render(new TripSortView(), this.eventsContainer);
     render(this.listComponent, this.eventsContainer);
-    render(new EditPointView({point: this.EventsPoints[0]}), this.listComponent.getElement());
-    render(new AddNewPointView({point: this.EventsPoints[1]}), this.listComponent.getElement());
+    render(new EditPointView({point: this.eventsPoints[0],offers: this.offers, destinations: this.destinations}), this.listComponent.getElement());
+    render(new AddNewPointView({point: this.eventsPoints[1],offers: this.offers, destinations: this.destinations}), this.listComponent.getElement());
 
     for (let i = 2; i < 5; i++) {
-      render(new PointView({point: this.EventsPoints[i]}), this.listComponent.getElement());
+      render(new PointView({point: this.eventsPoints[i],offers: this.offers, destinations: this.destinations}), this.listComponent.getElement());
     }
   }
 }

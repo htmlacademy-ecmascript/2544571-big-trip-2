@@ -205,4 +205,8 @@ const MOCK_OFFERS_LIST = [
   }
 ];
 
-export {MOCK_OFFERS_LIST};
+function getMockOffersList () {
+  return MOCK_OFFERS_LIST;
+}
+
+export {getMockOffersList};
