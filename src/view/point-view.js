@@ -1,12 +1,15 @@
 import {createElement} from '../render.js';
+import {humanizeDate} from '../utils.js';
 
 function createPointTemplate(point) {
 
-  const {basePrice,type} = point; // цена в event__price-value меняется - данные дошли до вьюшки
+  const {basePrice,type,dateFrom} = point; // цена в event__price-value меняется - данные дошли до вьюшки
+
+  const humanizedPointDateFrom = humanizeDate(dateFrom);
 
   return (`<li class="trip-events__item">
               <div class="event">
-                <time class="event__date" datetime="2019-03-18">MAR 18</time>
+                <time class="event__date" datetime="2019-03-18">${humanizedPointDateFrom}</time>
                 <div class="event__type">
                   <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
                 </div>
