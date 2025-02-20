@@ -2,13 +2,13 @@ import {createElement} from '../render.js';
 
 function createPointTemplate(point) {
 
-  const {basePrice} = point; // цена в event__price-value меняется - данные дошли до вьюшки
+  const {basePrice,type} = point; // цена в event__price-value меняется - данные дошли до вьюшки
 
   return (`<li class="trip-events__item">
               <div class="event">
                 <time class="event__date" datetime="2019-03-18">MAR 18</time>
                 <div class="event__type">
-                  <img class="event__type-icon" width="42" height="42" src="img/icons/taxi.png" alt="Event type icon">
+                  <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
                 </div>
                 <h3 class="event__title">Taxi Amsterdam</h3>
                 <div class="event__schedule">

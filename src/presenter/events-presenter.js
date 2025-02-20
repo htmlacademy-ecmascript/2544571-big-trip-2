@@ -18,10 +18,10 @@ export default class EventsPresenter {
 
     render(new TripSortView(), this.eventsContainer);
     render(this.listComponent, this.eventsContainer);
-    render(new EditPointView(), this.listComponent.getElement());
-    render(new AddNewPointView(), this.listComponent.getElement());
+    render(new EditPointView({point: this.EventsPoints[0]}), this.listComponent.getElement());
+    render(new AddNewPointView({point: this.EventsPoints[1]}), this.listComponent.getElement());
 
-    for (let i = 0; i < 3; i++) {
+    for (let i = 2; i < 5; i++) {
       render(new PointView({point: this.EventsPoints[i]}), this.listComponent.getElement());
     }
   }
