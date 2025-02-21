@@ -1,4 +1,6 @@
 import { createElement } from '../render.js';
+import {humanizeDateTime} from '../utils.js';
+
 
 function createOffersEditTemplate(checkedOffers, offersType , allOffers) {
   const selectedTypeOffersList = allOffers.find((offer) => offer.type === offersType).offers;
@@ -26,13 +28,16 @@ function createOffersEditTemplate(checkedOffers, offersType , allOffers) {
 
 function createEditNewPointTemplate(point , offers , destinations) {
 
-  const { type, offers: pointOffers , destination: pointDestination } = point;
+  const { dateTo, dateFrom, type, offers: pointOffers , destination: pointDestination } = point;
 
   const selectedDestination = destinations.find((x) => x.id === pointDestination);
 
   const editOffersTemplate = createOffersEditTemplate(pointOffers, type , offers);
 
   const destinationName = selectedDestination.name;
+
+  const humanizedTimeFrom = humanizeDateTime(dateFrom);
+  const humanizedTimeTo = humanizeDateTime(dateTo);
 
   return (`<li class="trip-events__item">
               <form class="event event--edit" action="#" method="post">
@@ -110,10 +115,10 @@ function createEditNewPointTemplate(point , offers , destinations) {
 
                   <div class="event__field-group  event__field-group--time">
                     <label class="visually-hidden" for="event-start-time-1">From</label>
-                    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="18/03/19 12:25">
+                    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${humanizedTimeFrom}">
                     &mdash;
                     <label class="visually-hidden" for="event-end-time-1">To</label>
-                    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="18/03/19 13:35">
+                    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${humanizedTimeTo}">
                   </div>
 
                   <div class="event__field-group  event__field-group--price">

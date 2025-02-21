@@ -1,5 +1,5 @@
 import {createElement} from '../render.js';
-import {humanizeDate, getTimeDifference,humanizeTime} from '../utils.js';
+import {humanizeDate, getTimeDifference,humanizeDateTime} from '../utils.js';
 
 function createPointTemplate(point) {
 
@@ -7,8 +7,8 @@ function createPointTemplate(point) {
 
   const humanizedPointDateFrom = humanizeDate(dateFrom);
   const timeDifference = getTimeDifference(dateTo,dateFrom);
-  const humanizedTimeFrom = humanizeTime(dateFrom);
-  const humanizedTimeTo = humanizeTime(dateTo);
+  const humanizedTimeFrom = humanizeDateTime(dateFrom);
+  const humanizedTimeTo = humanizeDateTime(dateTo);
 
   return (`<li class="trip-events__item">
               <div class="event">
