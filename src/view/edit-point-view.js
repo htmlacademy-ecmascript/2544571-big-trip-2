@@ -1,8 +1,8 @@
 import { createElement } from '../render.js';
-import {humanizeDateTime} from '../utils.js';
+import { humanizeDateTime } from '../utils.js';
 
 
-function createOffersEditTemplate(checkedOffers, offersType , allOffers) {
+function createOffersEditTemplate(checkedOffers, offersType, allOffers) {
   const selectedTypeOffersList = allOffers.find((offer) => offer.type === offersType).offers;
 
   const offersElements = selectedTypeOffersList.map((offer) =>
@@ -26,13 +26,13 @@ function createOffersEditTemplate(checkedOffers, offersType , allOffers) {
   </section>`);
 }
 
-function createEditNewPointTemplate(point , offers , destinations) {
+function createEditNewPointTemplate(point, offers, destinations) {
 
-  const { dateTo, dateFrom, type, offers: pointOffers , destination: pointDestination } = point;
+  const { dateTo, dateFrom, type, offers: pointOffers, destination: pointDestination } = point;
 
   const selectedDestination = destinations.find((x) => x.id === pointDestination);
 
-  const editOffersTemplate = createOffersEditTemplate(pointOffers, type , offers);
+  const editOffersTemplate = createOffersEditTemplate(pointOffers, type, offers);
 
   const destinationName = selectedDestination.name;
 
@@ -103,7 +103,7 @@ function createEditNewPointTemplate(point , offers , destinations) {
 
                   <div class="event__field-group  event__field-group--destination">
                     <label class="event__label  event__type-output" for="event-destination-1">
-                      Flight
+                      ${type}
                     </label>
                     <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationName}" list="destination-list-1">
                     <datalist id="destination-list-1">
@@ -136,7 +136,7 @@ function createEditNewPointTemplate(point , offers , destinations) {
                   </button>
                 </header>
                 <section class="event__details">
-                ${offers.length ? editOffersTemplate : ''}
+                ${pointOffers.length ? editOffersTemplate : ''}
                   <section class="event__section  event__section--destination">
                     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
                     <p class="event__destination-description">Chamonix-Mont-Blanc (usually shortened to Chamonix) is a resort area near the junction of France, Switzerland and Italy. At the base of Mont Blanc, the highest summit in the Alps, it's renowned for its skiing.</p>
@@ -149,7 +149,7 @@ function createEditNewPointTemplate(point , offers , destinations) {
 
 export default class EditPointView {
 
-  constructor({ point , offers , destinations }) {
+  constructor({ point, offers, destinations }) {
     this.point = point;
     this.offers = offers;
     this.destinations = destinations;
