@@ -27,10 +27,14 @@ function createOffersEditTemplate(checkedOffers, offersType, allOffers) {
 }
 
 function createPicturesTemplate(destinationInfo) {
-  const picturesList = destinationInfo.pictures
+  const picturesList = destinationInfo.pictures;
 
   return (picturesList.map((picture) =>
-    `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`));
+    `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`).join(''));
+}
+
+function createOptionsListTemplate(destinationInfo) {
+  return(destinationInfo.map((destination) => `<option value="${destination.name}"></option>`).join(''));
 }
 
 function createEditNewPointTemplate(point, offers, destinations) {
@@ -46,6 +50,8 @@ function createEditNewPointTemplate(point, offers, destinations) {
 
   const humanizedTimeFrom = humanizeDateTime(dateFrom);
   const humanizedTimeTo = humanizeDateTime(dateTo);
+
+  const optionsListTemplate = createOptionsListTemplate(destinations);
 
   return (`<li class="trip-events__item">
               <form class="event event--edit" action="#" method="post">
@@ -115,9 +121,7 @@ function createEditNewPointTemplate(point, offers, destinations) {
                     </label>
                     <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationName}" list="destination-list-1">
                     <datalist id="destination-list-1">
-                      <option value="Amsterdam"></option>
-                      <option value="Geneva"></option>
-                      <option value="Chamonix"></option>
+                    ${optionsListTemplate}
                     </datalist>
                   </div>
 
