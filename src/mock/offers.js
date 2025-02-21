@@ -210,3 +210,4 @@ function getMockOffersList () {
 }
 
 export {getMockOffersList};
+

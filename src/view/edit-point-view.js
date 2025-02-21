@@ -16,7 +16,7 @@ function createOffersEditTemplate(checkedOffers, offersType, allOffers) {
           &plus;&euro;&nbsp;
           <span class="event__offer-price">${offer.price}</span>
         </label>
-      </div>`).join();
+      </div>`).join('');
 
   return (`<section class="event__section  event__section--offers">
     <h3 class="event__section-title  event__section-title--offers">Offers</h3>

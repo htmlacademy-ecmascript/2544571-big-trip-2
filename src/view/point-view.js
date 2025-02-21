@@ -1,28 +1,37 @@
-import {createElement} from '../render.js';
-import {humanizeDate, getTimeDifference, humanizeTime} from '../utils.js';
+import { createElement } from '../render.js';
+import { humanizeDate, getTimeDifference, humanizeTime } from '../utils.js';
 
-function createSelectedOffersTemplate () {
+function createSelectedOffersTemplate(chosenOffers, allOffers) {
+
+  const offersList = [];
+  allOffers.forEach((type) => type.offers.forEach((offer) => chosenOffers.includes(offer.id) ? offersList.push(offer) : null));
+
+  const offersElements = offersList.map((offer) =>
+    `<li class="event__offer">
+                    <span class="event__offer-title">${offer.title}</span>
+                    &plus;&euro;&nbsp;
+                    <span class="event__offer-price">${offer.price}</span>
+                  </li>`
+
+  ).join('');
+
   return (`                <h4 class="visually-hidden">Offers:</h4>
                 <ul class="event__selected-offers">
-                  <li class="event__offer">
-                    <span class="event__offer-title">Order Uber</span>
-                    &plus;&euro;&nbsp;
-                    <span class="event__offer-price">20</span>
-                  </li>
+                  ${offersElements}
                 </ul>`);
 }
 
 function createPointTemplate(point, offers, destinations) {
 
-  const {basePrice,type,dateFrom,dateTo,isFavorite, offers: pointOffers, destination: pointDestination} = point;
+  const { basePrice, type, dateFrom, dateTo, isFavorite, offers: pointOffers, destination: pointDestination } = point;
 
   const selectedDestination = destinations.find((x) => x.id === pointDestination);
 
   const humanizedPointDateFrom = humanizeDate(dateFrom);
-  const timeDifference = getTimeDifference(dateTo,dateFrom);
+  const timeDifference = getTimeDifference(dateTo, dateFrom);
   const humanizedTimeFrom = humanizeTime(dateFrom);
   const humanizedTimeTo = humanizeTime(dateTo);
-  const selectedOffers = createSelectedOffersTemplate();
+  const selectedOffersTemplate = createSelectedOffersTemplate(pointOffers, offers);
 
   return (`<li class="trip-events__item">
               <div class="event">
@@ -42,7 +51,7 @@ function createPointTemplate(point, offers, destinations) {
                 <p class="event__price">
                   &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
                 </p>
-                ${pointOffers ? selectedOffers : ''}
+                ${pointOffers ? selectedOffersTemplate : ''}
                 <button class="event__favorite-btn ${isFavorite ? 'event__favorite-btn--active' : ''}" type="button">
                   <span class="visually-hidden">Add to favorite</span>
                   <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
