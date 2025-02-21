@@ -5,9 +5,14 @@ dayjs.extend(utc);
 
 const DATE_FORMAT = 'MMM D';
 const DATE_TIME_FORMAT = 'DD/MM/YY HH:mm';
+const TIME_FORMAT = 'HH:mm';
 
 function humanizeDate(date) {
   return date ? dayjs.utc(date).format(DATE_FORMAT) : '';
+}
+
+function humanizeTime(time) {
+  return time ? dayjs.utc(time).format(TIME_FORMAT) : '';
 }
 
 function humanizeDateTime(dateTime) {
@@ -24,4 +29,4 @@ function getRandomArrayElement(items) {
   return items[Math.floor(Math.random() * items.length)];
 }
 
-export { getRandomArrayElement, humanizeDate, getTimeDifference, humanizeDateTime };
+export { getRandomArrayElement, humanizeDate, getTimeDifference, humanizeDateTime , humanizeTime };
