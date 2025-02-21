@@ -29,7 +29,7 @@ function getTimeDifference(firstDate, secondDate) {
 
   const format = 'DD[D] HH[H] mm[M]';
 
-  return difference.format(format).replace(/\b00D\b/, '').replace(/\b00H\b/, '');
+  return difference.format(format).replace(/\b00D 00H\b/, '').replace(/\b00D\b/, '');
 }
 
 function getRandomArrayElement(items) {
