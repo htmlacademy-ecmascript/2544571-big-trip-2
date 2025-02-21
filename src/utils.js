@@ -3,6 +3,9 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
+import duration from 'dayjs/plugin/duration';
+dayjs.extend(duration);
+
 const DATE_FORMAT = 'MMM D';
 const DATE_TIME_FORMAT = 'DD/MM/YY HH:mm';
 const TIME_FORMAT = 'HH:mm';
@@ -22,7 +25,11 @@ function humanizeDateTime(dateTime) {
 function getTimeDifference(firstDate, secondDate) {
   const date1 = dayjs(firstDate);
   const date2 = dayjs(secondDate);
-  return date1.diff(date2, 'h');
+  const difference = dayjs.duration(date1.diff(date2));
+
+  const format = 'DD[D] HH[H] mm[M]';
+
+  return difference.format(format).replace(/\b00D\b/, '').replace(/\b00H\b/, '');
 }
 
 function getRandomArrayElement(items) {
