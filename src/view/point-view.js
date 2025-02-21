@@ -1,9 +1,11 @@
 import {createElement} from '../render.js';
 import {humanizeDate, getTimeDifference, humanizeTime} from '../utils.js';
 
-function createPointTemplate(point) {
+function createPointTemplate(point, offers, destinations) {
 
-  const {basePrice,type,dateFrom,dateTo,isFavorite} = point; // цена в event__price-value меняется - данные дошли до вьюшки
+  const {basePrice,type,dateFrom,dateTo,isFavorite, offers: pointOffers, destination: pointDestination} = point;
+
+  const selectedDestination = destinations.find((x) => x.id === pointDestination);
 
   const humanizedPointDateFrom = humanizeDate(dateFrom);
   const timeDifference = getTimeDifference(dateTo,dateFrom);
@@ -16,7 +18,7 @@ function createPointTemplate(point) {
                 <div class="event__type">
                   <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
                 </div>
-                <h3 class="event__title">${type} Amsterdam</h3>
+                <h3 class="event__title">${type} ${selectedDestination.name}</h3>
                 <div class="event__schedule">
                   <p class="event__time">
                     <time class="event__start-time" datetime="2019-03-18T10:30">${humanizedTimeFrom}</time>
@@ -51,12 +53,14 @@ function createPointTemplate(point) {
 
 export default class PointView {
 
-  constructor({point}) {
+  constructor({ point, offers, destinations }) {
     this.point = point;
+    this.offers = offers;
+    this.destinations = destinations;
   }
 
   getTemplate() {
-    return createPointTemplate(this.point);
+    return createPointTemplate(this.point, this.offers, this.destinations);
   }
 
   getElement() {
