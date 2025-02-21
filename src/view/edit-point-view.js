@@ -26,13 +26,21 @@ function createOffersEditTemplate(checkedOffers, offersType, allOffers) {
   </section>`);
 }
 
+function createPicturesTemplate(destinationInfo) {
+  const picturesList = destinationInfo.pictures
+
+  return (picturesList.map((picture) =>
+    `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`));
+}
+
 function createEditNewPointTemplate(point, offers, destinations) {
 
-  const { dateTo, dateFrom, type, offers: pointOffers, destination: pointDestination , basePrice } = point;
+  const { dateTo, dateFrom, type, offers: pointOffers, destination: pointDestination, basePrice } = point;
 
   const selectedDestination = destinations.find((x) => x.id === pointDestination);
 
   const editOffersTemplate = createOffersEditTemplate(pointOffers, type, offers);
+  const picturesTemplate = createPicturesTemplate(selectedDestination);
 
   const destinationName = selectedDestination.name;
 
@@ -141,6 +149,11 @@ function createEditNewPointTemplate(point, offers, destinations) {
                                     <section class="event__section  event__section--destination">
                     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
                     <p class="event__destination-description">${selectedDestination.description}</p>
+                    ${selectedDestination?.pictures.length ? `                    <div class="event__photos-container">
+                      <div class="event__photos-tape">
+                      ${picturesTemplate}
+                      </div>
+                    </div>` : ''}
                   </section>
                   ` : ''}
                 </section>
