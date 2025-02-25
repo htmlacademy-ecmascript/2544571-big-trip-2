@@ -6,20 +6,22 @@ dayjs.extend(utc);
 import duration from 'dayjs/plugin/duration';
 dayjs.extend(duration);
 
-const DATE_FORMAT = 'MMM D';
-const DATE_TIME_FORMAT = 'DD/MM/YY HH:mm';
-const TIME_FORMAT = 'HH:mm';
+const TimeFormat = {
+  DATE_FORMAT: 'MMM D',
+  DATE_TIME_FORMAT: 'DD/MM/YY HH:mm',
+  TIME_FORMAT: 'HH:mm'
+};
 
 function humanizeDate(date) {
-  return date ? dayjs.utc(date).format(DATE_FORMAT) : '';
+  return date ? dayjs.utc(date).format(TimeFormat.DATE_FORMAT) : '';
 }
 
 function humanizeTime(time) {
-  return time ? dayjs.utc(time).format(TIME_FORMAT) : '';
+  return time ? dayjs.utc(time).format(TimeFormat.TIME_FORMAT) : '';
 }
 
 function humanizeDateTime(dateTime) {
-  return dateTime ? dayjs.utc(dateTime).format(DATE_TIME_FORMAT) : '';
+  return dateTime ? dayjs.utc(dateTime).format(TimeFormat.DATE_TIME_FORMAT) : '';
 }
 
 function getTimeDifference(firstDate, secondDate) {
@@ -36,4 +38,4 @@ function getRandomArrayElement(items) {
   return items[Math.floor(Math.random() * items.length)];
 }
 
-export { getRandomArrayElement, humanizeDate, getTimeDifference, humanizeDateTime , humanizeTime };
+export { getRandomArrayElement, humanizeDate, getTimeDifference, humanizeDateTime, humanizeTime };
