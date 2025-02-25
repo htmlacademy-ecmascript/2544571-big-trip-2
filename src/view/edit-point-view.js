@@ -39,7 +39,6 @@ function createOptionsListTemplate(destinationInfo) {
 }
 
 function createEventTypesTemplate (chosenType) {
-  console.log(chosenType);
   return(EVENT_TYPES.map((type) => `
   <div class="event__type-item">
   <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}"${type === chosenType ? 'checked' : ''}>
