@@ -1,7 +1,18 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { humanizeDateTime } from '../utils.js';
 
-const EVENT_TYPES = ['taxi','bus','train','ship','drive','flight','check-in','sightseeing','restaurant'];
+const BLANK_POINT = {
+  'id': '007',
+  'basePrice': 0,
+  'dateFrom': null,
+  'dateTo': null,
+  'destination': null,
+  'isFavorite': false,
+  'offers': [],
+  'type': 'taxi'
+};
+
+const EVENT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 
 function createOffersEditTemplate(checkedOffers, offersType, allOffers) {
   const selectedTypeOffersList = allOffers.find((offer) => offer.type === offersType).offers;
@@ -35,11 +46,11 @@ function createPicturesTemplate(destinationInfo) {
 }
 
 function createOptionsListTemplate(destinationInfo) {
-  return(destinationInfo.map((destination) => `<option value="${destination.name}"></option>`).join(''));
+  return (destinationInfo.map((destination) => `<option value="${destination.name}"></option>`).join(''));
 }
 
-function createEventTypesTemplate (chosenType) {
-  return(EVENT_TYPES.map((type) => `
+function createEventTypesTemplate(chosenType) {
+  return (EVENT_TYPES.map((type) => `
   <div class="event__type-item">
   <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}"${type === chosenType ? 'checked' : ''}>
   <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type[0].toUpperCase() + type.slice(1)}</label>
@@ -139,15 +150,28 @@ export default class EditPointView extends AbstractView {
   #offers = null;
   #destinations = null;
 
-  constructor({ point, offers, destinations }) {
+  #handleFormSubmit = null;
+
+
+  constructor({onFormSubmit, point = BLANK_POINT, offers, destinations }) {
     super();
     this.#point = point;
     this.#offers = offers;
     this.#destinations = destinations;
+
+    this.#handleFormSubmit = onFormSubmit;
+
+    this.element.querySelector('form')
+      .addEventListener('submit', this.#formSubmitHandler);
   }
 
   get template() {
     return createEditNewPointTemplate(this.#point, this.#offers, this.#destinations);
   }
+
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormSubmit();
+  };
 }
 
