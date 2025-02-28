@@ -51,7 +51,7 @@ export default class EventsPresenter {
     });
     const pointEditComponent = new EditPointView({
       point, offers: this.#offers, destinations: this.#destinations,
-      onFormSubmit: () => {
+      onFormClose: () => {
         replaceFormToCard();
         document.removeEventListener('keydown', escKeyDownHandler);
       }
