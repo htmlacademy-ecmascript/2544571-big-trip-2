@@ -1,7 +1,18 @@
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import { humanizeDateTime } from '../utils.js';
 
-const EVENT_TYPES = ['taxi','bus','train','ship','drive','flight','check-in','sightseeing','restaurant'];
+const BLANK_POINT = {
+  'id': '007',
+  'basePrice': 0,
+  'dateFrom': null,
+  'dateTo': null,
+  'destination': null,
+  'isFavorite': false,
+  'offers': [],
+  'type': 'taxi'
+};
+
+const EVENT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 
 function createOffersEditTemplate(checkedOffers, offersType, allOffers) {
   const selectedTypeOffersList = allOffers.find((offer) => offer.type === offersType).offers;
@@ -35,11 +46,11 @@ function createPicturesTemplate(destinationInfo) {
 }
 
 function createOptionsListTemplate(destinationInfo) {
-  return(destinationInfo.map((destination) => `<option value="${destination.name}"></option>`).join(''));
+  return (destinationInfo.map((destination) => `<option value="${destination.name}"></option>`).join(''));
 }
 
-function createEventTypesTemplate (chosenType) {
-  return(EVENT_TYPES.map((type) => `
+function createEventTypesTemplate(chosenType) {
+  return (EVENT_TYPES.map((type) => `
   <div class="event__type-item">
   <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}"${type === chosenType ? 'checked' : ''}>
   <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type[0].toUpperCase() + type.slice(1)}</label>
@@ -134,63 +145,43 @@ function createEditNewPointTemplate(point, offers, destinations) {
 `);
 }
 
-export default class EditPointView {
+export default class EditPointView extends AbstractView {
+  #point = null;
+  #offers = null;
+  #destinations = null;
 
-  constructor({ point, offers, destinations }) {
-    this.point = point;
-    this.offers = offers;
-    this.destinations = destinations;
+  #handleFormClose = null;
+
+
+  constructor({ onFormClose, point = BLANK_POINT, offers, destinations }) {
+    super();
+    this.#point = point;
+    this.#offers = offers;
+    this.#destinations = destinations;
+
+    this.#handleFormClose = onFormClose;
+
+    this.element.querySelector('form')
+      .addEventListener('submit', this.#formSubmitHandler);
+
+    this.element.querySelector('.event__rollup-btn')
+      .addEventListener('click', this.#formCloseHandler);
   }
 
-  getTemplate() {
-    return createEditNewPointTemplate(this.point, this.offers, this.destinations);
+  get template() {
+    return createEditNewPointTemplate(this.#point, this.#offers, this.#destinations);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormClose();
+  };
 
-    return this.element;
-  }
+  #formCloseHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormClose();
+  };
 
-  removeElement() {
-    this.element = null;
-  }
+
 }
 
-{/* <div class="event__offer-selector">
-<input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" checked>
-<label class="event__offer-label" for="event-offer-comfort-1">
-  <span class="event__offer-title">Switch to comfort</span>
-  &plus;&euro;&nbsp;
-  <span class="event__offer-price">80</span>
-</label>
-</div>
-
-<div class="event__offer-selector">
-<input class="event__offer-checkbox  visually-hidden" id="event-offer-meal-1" type="checkbox" name="event-offer-meal">
-<label class="event__offer-label" for="event-offer-meal-1">
-  <span class="event__offer-title">Add meal</span>
-  &plus;&euro;&nbsp;
-  <span class="event__offer-price">15</span>
-</label>
-</div>
-
-<div class="event__offer-selector">
-<input class="event__offer-checkbox  visually-hidden" id="event-offer-seats-1" type="checkbox" name="event-offer-seats">
-<label class="event__offer-label" for="event-offer-seats-1">
-  <span class="event__offer-title">Choose seats</span>
-  &plus;&euro;&nbsp;
-  <span class="event__offer-price">5</span>
-</label>
-</div>
-
-<div class="event__offer-selector">
-<input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train">
-<label class="event__offer-label" for="event-offer-train-1">
-  <span class="event__offer-title">Travel by train</span>
-  &plus;&euro;&nbsp;
-  <span class="event__offer-price">40</span>
-</label>
-</div> */}
