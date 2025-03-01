@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { humanizeDate, getTimeDifference, humanizeTime } from '../utils/task.js';
+import { humanizeDate, getTimeDifference, humanizeTime } from '../utils/point.js';
 
 function createSelectedOffersTemplate(chosenOffers, allOffers) {
 

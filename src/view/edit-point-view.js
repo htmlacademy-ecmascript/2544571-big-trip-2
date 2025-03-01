@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { humanizeDateTime } from '../utils/task.js';
+import { humanizeDateTime } from '../utils/point.js';
 
 const BLANK_POINT = {
   'id': '007',
