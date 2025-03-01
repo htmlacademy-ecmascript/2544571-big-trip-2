@@ -34,8 +34,16 @@ function getTimeDifference(firstDate, secondDate) {
   return difference.format(format).replace(/\b00D 00H\b/, '').replace(/\b00D\b/, '');
 }
 
-function getRandomArrayElement(items) {
-  return items[Math.floor(Math.random() * items.length)];
+function isPointInPast(pointDate) {
+  return pointDate && dayjs.utc().isAfter(pointDate, 'D');
 }
 
-export { getRandomArrayElement, humanizeDate, getTimeDifference, humanizeDateTime, humanizeTime };
+function isPointInFuture(pointDate) {
+  return pointDate && dayjs.utc().isBefore(pointDate, 'D');
+}
+
+// function isPointToday (pointDate) {
+//   return pointDate && dayjs.utc(pointDate).isSame(dayjs.utc(), 'D');
+// }
+
+export { isPointInFuture, isPointInPast, humanizeDate, getTimeDifference, humanizeDateTime, humanizeTime };

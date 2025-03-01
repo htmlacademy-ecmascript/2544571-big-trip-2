@@ -2,7 +2,7 @@ import {getRandomPoint} from '../mock/points.js';
 import {getMockDestinationsList} from '../mock/destinations.js';
 import {getMockOffersList} from '../mock/offers.js';
 
-const POINTS_COUNT = 5;
+const POINTS_COUNT = 3;
 
 export default class EventsModel {
   #points = Array.from({length: POINTS_COUNT}, getRandomPoint);
