@@ -34,8 +34,4 @@ function getTimeDifference(firstDate, secondDate) {
   return difference.format(format).replace(/\b00D 00H\b/, '').replace(/\b00D\b/, '');
 }
 
-function getRandomArrayElement(items) {
-  return items[Math.floor(Math.random() * items.length)];
-}
-
-export { getRandomArrayElement, humanizeDate, getTimeDifference, humanizeDateTime, humanizeTime };
+export { humanizeDate, getTimeDifference, humanizeDateTime, humanizeTime };
