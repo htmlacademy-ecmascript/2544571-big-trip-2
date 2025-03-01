@@ -3,6 +3,7 @@ import TripSortView from '../view/trip-sort-view.js';
 import EditPointView from '../view/edit-point-view.js';
 import PointView from '../view/point-view.js';
 import { render, replace } from '../framework/render.js';
+import NoPointsView from '../view/no-points-view.js';
 
 export default class EventsPresenter {
   #eventsContainer = null;
@@ -21,12 +22,12 @@ export default class EventsPresenter {
 
   init() {
     this.#eventsPoints = [...this.#eventsModel.points];
+    this.#eventsPoints = [];
 
     this.#renderBoard();
   }
 
   #renderPoint(point) {
-    // const pointComponent = new PointView({ point, offers: this.#offers, destinations: this.#destinations });
 
     const escKeyDownHandler = (evt) => {
       if (evt.key === 'Escape') {
@@ -64,6 +65,11 @@ export default class EventsPresenter {
   #renderBoard() {
     this.#offers = this.#eventsModel.offers;
     this.#destinations = this.#eventsModel.destinations;
+
+    if (this.#eventsPoints.length === 0) {
+      render(new NoPointsView(), this.#eventsContainer);
+      return;
+    }
 
     render(new TripSortView(), this.#eventsContainer);
     render(this.#listComponent, this.#eventsContainer);
