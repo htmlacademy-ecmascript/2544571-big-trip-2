@@ -21,15 +21,8 @@ export default class EventsPresenter {
 
   init() {
     this.#eventsPoints = [...this.#eventsModel.points];
-    this.#offers = this.#eventsModel.offers;
-    this.#destinations = this.#eventsModel.destinations;
 
-    render(new TripSortView(), this.#eventsContainer);
-    render(this.#listComponent, this.#eventsContainer);
-
-    for (let i = 0; i < 3; i++) {
-      this.#renderPoint(this.#eventsPoints[i]);
-    }
+    this.#renderBoard();
   }
 
   #renderPoint(point) {
@@ -66,5 +59,17 @@ export default class EventsPresenter {
     }
 
     render(pointComponent, this.#listComponent.element);
+  }
+
+  #renderBoard() {
+    this.#offers = this.#eventsModel.offers;
+    this.#destinations = this.#eventsModel.destinations;
+
+    render(new TripSortView(), this.#eventsContainer);
+    render(this.#listComponent, this.#eventsContainer);
+
+    for (let i = 0; i < 3; i++) {
+      this.#renderPoint(this.#eventsPoints[i]);
+    }
   }
 }
