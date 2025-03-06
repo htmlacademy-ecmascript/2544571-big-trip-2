@@ -35,7 +35,7 @@ export default class EventsPresenter {
 
   #handlePointChange = (updatedPoint) => {
     this.#eventsPoints = updateItem(this.#eventsPoints, updatedPoint);
-    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
+    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint, this.#offers, this.#destinations);
   };
 
   #renderSort() {
