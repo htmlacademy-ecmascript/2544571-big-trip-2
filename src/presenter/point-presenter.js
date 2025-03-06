@@ -17,25 +17,19 @@ export default class PointPresenter {
     this.#pointListContainer = pointListContainer;
   }
 
-  init(point,offers,destinations) {
+  init(point, offers, destinations) {
     this.#point = point;
     this.#offers = offers;
     this.#destinations = destinations;
 
     this.#pointComponent = new PointView({
       point: this.#point, offers: this.#offers, destinations: this.#destinations,
-      onEditClick: () => {
-        this.#replaceCardToForm();
-        document.addEventListener('keydown', this.#escKeyDownHandler);
-      }
+      onEditClick: this.#handleEditClick,
     });
 
     this.#pointEditComponent = new EditPointView({
       point: this.#point, offers: this.#offers, destinations: this.#destinations,
-      onFormClose: () => {
-        this.#replaceFormToCard();
-        document.removeEventListener('keydown', this.#escKeyDownHandler);
-      }
+      onFormClose: this.#handleFormClose,
     });
 
     render(this.#pointComponent, this.#pointListContainer.element);
@@ -56,4 +50,15 @@ export default class PointPresenter {
       document.removeEventListener('keydown', this.#escKeyDownHandler);
     }
   };
+
+  #handleEditClick = () => {
+    this.#replaceCardToForm();
+    document.addEventListener('keydown', this.#escKeyDownHandler);
+  };
+
+  #handleFormClose = () => {
+    this.#replaceFormToCard();
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
+  };
+
 }
