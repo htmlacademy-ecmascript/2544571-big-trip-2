@@ -41,6 +41,7 @@ export default class EventsPresenter {
   #renderPoint(point) {
     const pointPresenter = new PointPresenter({
       pointListContainer: this.#listComponent,
+      onDataChange: this.#handlePointChange
     });
     pointPresenter.init(point, this.#offers, this.#destinations);
     this.#pointPresenters.set(point.id, pointPresenter);
