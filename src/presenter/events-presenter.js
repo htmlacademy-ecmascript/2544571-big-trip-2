@@ -73,7 +73,13 @@ export default class EventsPresenter {
   }
 
   #renderNoPoints() {
-    render(this.#noPointsComponent, this.#eventsContainer.element, RenderPosition.AFTERBEGIN);
+    render(this.#noPointsComponent, this.#eventsContainer, RenderPosition.AFTERBEGIN);
+  }
+
+  #renderPointsList() {
+    render(this.#listComponent, this.#eventsContainer);
+    this.#renderPoints();
+
   }
 
   #renderBoard() {
@@ -81,15 +87,13 @@ export default class EventsPresenter {
     this.#destinations = this.#eventsModel.destinations;
 
     if (this.#eventsPoints.length === 0) {
-      render(new NoPointsView(), this.#eventsContainer);
+      this.#renderNoPoints();
       return;
     }
 
-    render(new TripSortView(), this.#eventsContainer);
-    render(this.#listComponent, this.#eventsContainer);
+    this.#renderSort();
+    this.#renderPointsList();
 
-    for (let i = 0; i < 3; i++) {
-      this.#renderPoint(this.#eventsPoints[i]);
-    }
+
   }
 }
