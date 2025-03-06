@@ -1,10 +1,13 @@
 import dayjs from 'dayjs';
-
 import utc from 'dayjs/plugin/utc';
-dayjs.extend(utc);
-
 import duration from 'dayjs/plugin/duration';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
 dayjs.extend(duration);
+dayjs.extend(utc);
 
 const TimeFormat = {
   DATE_FORMAT: 'MMM D',
@@ -34,8 +37,21 @@ function getTimeDifference(firstDate, secondDate) {
   return difference.format(format).replace(/\b00D 00H\b/, '').replace(/\b00D\b/, '');
 }
 
-function getRandomArrayElement(items) {
-  return items[Math.floor(Math.random() * items.length)];
+function isPointInPast(pointDate) {
+  return pointDate && dayjs.utc().isAfter(pointDate);
 }
 
-export { getRandomArrayElement, humanizeDate, getTimeDifference, humanizeDateTime, humanizeTime };
+function isPointInFuture(pointDate) {
+  return pointDate && dayjs.utc().isBefore(pointDate);
+}
+
+function isPointSameOrInFuture(pointDate) {
+  return pointDate && dayjs.utc().isSameOrBefore(pointDate);
+}
+
+function isPointSameOrInPast(pointDate) {
+  return pointDate && dayjs.utc().isSameOrAfter(pointDate);
+}
+
+
+export { isPointSameOrInPast, isPointSameOrInFuture, isPointInFuture, isPointInPast, humanizeDate, getTimeDifference, humanizeDateTime, humanizeTime };
