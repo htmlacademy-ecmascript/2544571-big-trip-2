@@ -2,7 +2,7 @@ import TripEventsListView from '../view/trip-events-list-view.js';
 import TripSortView from '../view/trip-sort-view.js';
 import EditPointView from '../view/edit-point-view.js';
 import PointView from '../view/point-view.js';
-import { render, replace } from '../framework/render.js';
+import { render, RenderPosition, replace } from '../framework/render.js';
 import NoPointsView from '../view/no-points-view.js';
 
 export default class EventsPresenter {
@@ -10,6 +10,8 @@ export default class EventsPresenter {
   #eventsModel = null;
 
   #listComponent = new TripEventsListView();
+  #sortComponent = new TripSortView();
+  #noPointsComponent = new NoPointsView();
 
   #eventsPoints = [];
   #offers = null;
@@ -24,6 +26,10 @@ export default class EventsPresenter {
     this.#eventsPoints = [...this.#eventsModel.points];
 
     this.#renderBoard();
+  }
+
+  #renderSort() {
+    render(this.#sortComponent, this.#listComponent.element, RenderPosition.AFTERBEGIN);
   }
 
   #renderPoint(point) {
@@ -59,6 +65,15 @@ export default class EventsPresenter {
     }
 
     render(pointComponent, this.#listComponent.element);
+  }
+
+  #renderPoints() {
+    this.#eventsPoints
+      .forEach((point) => this.#renderPoint(point));
+  }
+
+  #renderNoPoints() {
+    render(this.#noPointsComponent, this.#eventsContainer.element, RenderPosition.AFTERBEGIN);
   }
 
   #renderBoard() {
