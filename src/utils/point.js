@@ -1,10 +1,13 @@
 import dayjs from 'dayjs';
-
 import utc from 'dayjs/plugin/utc';
-dayjs.extend(utc);
-
 import duration from 'dayjs/plugin/duration';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
 dayjs.extend(duration);
+dayjs.extend(utc);
 
 const TimeFormat = {
   DATE_FORMAT: 'MMM D',
@@ -35,15 +38,20 @@ function getTimeDifference(firstDate, secondDate) {
 }
 
 function isPointInPast(pointDate) {
-  return pointDate && dayjs.utc().isAfter(pointDate, 'D');
+  return pointDate && dayjs.utc().isAfter(pointDate);
 }
 
 function isPointInFuture(pointDate) {
-  return pointDate && dayjs.utc().isBefore(pointDate, 'D');
+  return pointDate && dayjs.utc().isBefore(pointDate);
 }
 
-// function isPointToday (pointDate) {
-//   return pointDate && dayjs.utc(pointDate).isSame(dayjs.utc(), 'D');
-// }
+function isPointSameOrInFuture(pointDate) {
+  return pointDate && dayjs.utc().isSameOrBefore(pointDate);
+}
 
-export { isPointInFuture, isPointInPast, humanizeDate, getTimeDifference, humanizeDateTime, humanizeTime };
+function isPointSameOrInPast(pointDate) {
+  return pointDate && dayjs.utc().isSameOrAfter(pointDate);
+}
+
+
+export { isPointSameOrInPast, isPointSameOrInFuture, isPointInFuture, isPointInPast, humanizeDate, getTimeDifference, humanizeDateTime, humanizeTime };
