@@ -37,10 +37,12 @@ export default class PointPresenter {
 
   #replaceCardToForm() {
     replace(this.#pointEditComponent, this.#pointComponent);
+    document.addEventListener('keydown', this.#escKeyDownHandler);
   }
 
   #replaceFormToCard() {
     replace(this.#pointComponent, this.#pointEditComponent);
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
 
   #escKeyDownHandler = (evt) => {
@@ -53,12 +55,10 @@ export default class PointPresenter {
 
   #handleEditClick = () => {
     this.#replaceCardToForm();
-    document.addEventListener('keydown', this.#escKeyDownHandler);
   };
 
   #handleFormClose = () => {
     this.#replaceFormToCard();
-    document.removeEventListener('keydown', this.#escKeyDownHandler);
   };
 
 }

@@ -64,7 +64,5 @@ export default class EventsPresenter {
 
     this.#renderSort();
     this.#renderPointsList();
-
-
   }
 }
