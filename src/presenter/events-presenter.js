@@ -10,7 +10,7 @@ export default class EventsPresenter {
   #eventsModel = null;
 
   #listComponent = new TripEventsListView();
-  #sortComponent = new TripSortView();
+  #sortComponent = null;
   #noPointsComponent = new NoPointsView();
 
   #eventsPoints = [];
@@ -38,7 +38,17 @@ export default class EventsPresenter {
     this.#pointPresenters.get(updatedPoint.id).init(updatedPoint, this.#offers, this.#destinations);
   };
 
+  #handleSortTypeChange = (sortType) => {
+    // - Сортируем задачи
+    // - Очищаем список
+    // - Рендерим список заново
+  };
+
   #renderSort() {
+    this.#sortComponent = new TripSortView({
+      onSortTypeChange: this.#handleSortTypeChange
+    });
+
     render(this.#sortComponent, this.#listComponent.element, RenderPosition.AFTERBEGIN);
   }
 
