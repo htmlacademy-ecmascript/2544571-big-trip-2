@@ -61,7 +61,7 @@ function sortPointTime(pointA, pointB) {
   return dayjs(pointA.dateFrom).diff(dayjs(pointA.dateTo)) - dayjs(pointB.dateFrom).diff(dayjs(pointB.dateTo));
 }
 
-function sortPointPrice(pointA, pointB) {
+function sortPointPrice(pointB, pointA) {
   return pointA.basePrice - pointB.basePrice;
 }
 
