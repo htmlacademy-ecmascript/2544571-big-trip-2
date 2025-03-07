@@ -28,6 +28,7 @@ export default class EventsPresenter {
 
   init() {
     this.#eventsPoints = [...this.#eventsModel.points];
+    this.#eventsPoints.sort(sortPointDay);
 
     this.#renderBoard();
   }
