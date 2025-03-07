@@ -50,10 +50,11 @@ export default class TripSortView extends AbstractView {
     }
 
     evt.preventDefault();
+
+    this.#handleSortTypeChange(evt.target.dataset.sortType);
     document.querySelector('input.trip-sort__input:checked').removeAttribute('checked');
     // поиск инпута с активным checked и удаление этого состояния
     document.querySelector(`input:has(+ label[data-sort-type="${evt.target.dataset.sortType}"])`).setAttribute('checked', '');
     // поиск инпута и установка для него состояния checked
-    this.#handleSortTypeChange(evt.target.dataset.sortType);
   };
 }
