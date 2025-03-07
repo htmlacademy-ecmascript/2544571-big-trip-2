@@ -53,5 +53,16 @@ function isPointSameOrInPast(pointDate) {
   return pointDate && dayjs.utc().isSameOrAfter(pointDate);
 }
 
+function sortPointDay(pointA, pointB) {
+  return dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom));
+}
 
-export { isPointSameOrInPast, isPointSameOrInFuture, isPointInFuture, isPointInPast, humanizeDate, getTimeDifference, humanizeDateTime, humanizeTime };
+function sortPointTime(pointA, pointB) {
+  return dayjs(pointA.dateFrom).diff(dayjs(pointA.dateTo)) - dayjs(pointB.dateFrom).diff(dayjs(pointB.dateTo));
+}
+
+function sortPointPrice(pointA, pointB) {
+  return pointA.basePrice - pointB.basePrice;
+}
+
+export {sortPointPrice, sortPointTime, sortPointDay, isPointSameOrInPast, isPointSameOrInFuture, isPointInFuture, isPointInPast, humanizeDate, getTimeDifference, humanizeDateTime, humanizeTime };

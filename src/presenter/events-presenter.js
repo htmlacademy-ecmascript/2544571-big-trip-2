@@ -4,6 +4,8 @@ import { render, RenderPosition} from '../framework/render.js';
 import NoPointsView from '../view/no-points-view.js';
 import PointPresenter from './point-presenter.js';
 import {updateItem} from '../utils/common.js';
+import {sortPointDay, sortPointTime, sortPointPrice} from '../utils/point.js';
+import {SortType} from '../const.js';
 
 export default class EventsPresenter {
   #eventsContainer = null;
@@ -17,6 +19,7 @@ export default class EventsPresenter {
   #offers = null;
   #destinations = null;
   #pointPresenters = new Map();
+  #currentSortType = SortType.DAY;
 
   constructor({ eventsContainer, eventsModel }) {
     this.#eventsContainer = eventsContainer;
@@ -38,8 +41,30 @@ export default class EventsPresenter {
     this.#pointPresenters.get(updatedPoint.id).init(updatedPoint, this.#offers, this.#destinations);
   };
 
+  #sortTasks(sortType) {
+    // 2. Этот исходный массив задач необходим,
+    // потому что для сортировки мы будем мутировать
+    // массив в свойстве _boardTasks
+    switch (sortType) {
+      case SortType.TIME:
+        this.#eventsPoints.sort(sortPointTime);
+        break;
+      case SortType.PRICE:
+        this.#eventsPoints.sort(sortPointPrice);
+        break;
+      default:
+        this.#eventsPoints.sort(sortPointDay);
+    }
+
+    this.#currentSortType = sortType;
+  }
+
   #handleSortTypeChange = (sortType) => {
-    // - Сортируем задачи
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+
+    this.#sortTasks(sortType);
     // - Очищаем список
     // - Рендерим список заново
   };
