@@ -65,8 +65,8 @@ export default class EventsPresenter {
     }
 
     this.#sortTasks(sortType);
-    // - Очищаем список
-    // - Рендерим список заново
+    this.#clearPointList();
+    this.#renderPointsList();
   };
 
   #renderSort() {
