@@ -127,7 +127,7 @@ function createEditNewPointTemplate(point, offers, destinations) {
                   </button>
                 </header>
                 <section class="event__details">
-                ${pointOffers.length ? editOffersTemplate : ''}
+                ${offers.find((offer) => offer.type === type).offers ? editOffersTemplate : ''}
                 ${selectedDestination?.description.length || selectedDestination?.pictures.length ? `
                                     <section class="event__section  event__section--destination">
                     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
@@ -155,7 +155,6 @@ export default class PointEditView extends AbstractStatefulView {
 
   constructor({ onFormSubmit, onFormClose, point = BLANK_POINT, offers, destinations }) {
     super();
-    console.log(point);
     this._setState(PointEditView.parsePointToState(point));
     this.#offers = offers;
     this.#destinations = destinations;
@@ -195,6 +194,7 @@ export default class PointEditView extends AbstractStatefulView {
     evt.preventDefault();
     this.updateElement({
       type: evt.target.value,
+      offers: [] // очистка выбранных офферов - надо ли?
     });
   };
 
