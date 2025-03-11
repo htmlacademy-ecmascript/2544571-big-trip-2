@@ -98,7 +98,7 @@ function createEditNewPointTemplate(point, offers, destinations) {
                     <label class="event__label  event__type-output" for="event-destination-1">
                       ${type}
                     </label>
-                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationName}" list="destination-list-1">
+                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationName}" data-destination-name="${destinationName}" list="destination-list-1">
                     <datalist id="destination-list-1">
                     ${optionsListTemplate}
                     </datalist>
@@ -155,6 +155,7 @@ export default class PointEditView extends AbstractStatefulView {
 
   constructor({ onFormSubmit, onFormClose, point = BLANK_POINT, offers, destinations }) {
     super();
+    console.log(point);
     this._setState(PointEditView.parsePointToState(point));
     this.#offers = offers;
     this.#destinations = destinations;
@@ -200,6 +201,11 @@ export default class PointEditView extends AbstractStatefulView {
   #eventDestinationToogleHandler = (evt) => {
     evt.preventDefault(); //ищем по названию, как прокинуть id?
     const newDestination = this.#destinations.find((x) => x.name === evt.target.value);
+    if(newDestination === undefined) { //добавляет невозможность ввести что угодно в поле
+      const inputElement = this.element.querySelector('.event__input--destination');
+      inputElement.value = inputElement.dataset.destinationName;
+      return;
+    }
     this.updateElement({
       destination: newDestination.id,
     });
