@@ -176,8 +176,8 @@ export default class PointEditView extends AbstractStatefulView {
       .addEventListener('click', this.#formCloseHandler);
     this.element.querySelector('.event__type-list')
       .addEventListener('change', this.#eventTypeToogleHandler);
-    // this.element.querySelector('.event__field-group--destination')
-    //   .addEventListener('change', this.#eventDestinationToogleHandler);
+    this.element.querySelector('.event__input--destination')
+      .addEventListener('change', this.#eventDestinationToogleHandler);
   }
 
   #formSubmitHandler = (evt) => {
@@ -197,12 +197,13 @@ export default class PointEditView extends AbstractStatefulView {
     });
   };
 
-  // #eventDestinationToogleHandler = (evt) => {
-  //   evt.preventDefault();
-  //   this.updateElement({
-  //     type: evt.target.value,
-  //   });
-  // };
+  #eventDestinationToogleHandler = (evt) => {
+    evt.preventDefault(); //ищем по названию, как прокинуть id?
+    const newDestination = this.#destinations.find((x) => x.name === evt.target.value);
+    this.updateElement({
+      destination: newDestination.id,
+    });
+  };
 
   static parsePointToState(point) {
     return {
