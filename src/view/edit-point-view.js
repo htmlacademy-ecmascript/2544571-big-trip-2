@@ -162,15 +162,22 @@ export default class PointEditView extends AbstractStatefulView {
     this.#handleFormSubmit = onFormSubmit;
     this.#handleFormClose = onFormClose;
 
-    this.element.querySelector('form')
-      .addEventListener('submit', this.#formSubmitHandler);
-
-    this.element.querySelector('.event__rollup-btn')
-      .addEventListener('click', this.#formCloseHandler);
+    this._restoreHandlers();
   }
 
   get template() {
     return createEditNewPointTemplate(this._state, this.#offers, this.#destinations);
+  }
+
+  _restoreHandlers() {
+    this.element.querySelector('form')
+      .addEventListener('submit', this.#formSubmitHandler);
+    this.element.querySelector('.event__rollup-btn')
+      .addEventListener('click', this.#formCloseHandler);
+    this.element.querySelector('.event__type-list')
+      .addEventListener('change', this.#eventTypeToogleHandler);
+    // this.element.querySelector('.event__field-group--destination')
+    //   .addEventListener('change', this.#eventDestinationToogleHandler);
   }
 
   #formSubmitHandler = (evt) => {
@@ -183,13 +190,28 @@ export default class PointEditView extends AbstractStatefulView {
     this.#handleFormClose(PointEditView.parseStateToPoint(this._state));
   };
 
+  #eventTypeToogleHandler = (evt) => {
+    evt.preventDefault();
+    this.updateElement({
+      type: evt.target.value,
+    });
+  };
+
+  // #eventDestinationToogleHandler = (evt) => {
+  //   evt.preventDefault();
+  //   this.updateElement({
+  //     type: evt.target.value,
+  //   });
+  // };
+
   static parsePointToState(point) {
-    return {...point,
+    return {
+      ...point,
     };
   }
 
   static parseStateToPoint(state) {
-    const point = {...state};
+    const point = { ...state };
     return point;
   }
 
