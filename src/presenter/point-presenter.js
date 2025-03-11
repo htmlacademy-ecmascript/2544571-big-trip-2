@@ -43,6 +43,7 @@ export default class PointPresenter {
 
     this.#pointEditComponent = new EditPointView({
       point: this.#point, offers: this.#offers, destinations: this.#destinations,
+      onFormSubmit: this.#handleFormSubmit,
       onFormClose: this.#handleFormClose,
     });
 
@@ -101,6 +102,11 @@ export default class PointPresenter {
 
   #handleFavoriteClick = () => {
     this.#handleDataChange({ ...this.#point, isFavorite: !this.#point.isFavorite });
+  };
+
+  #handleFormSubmit = (point) => {
+    this.#handleDataChange(point);
+    this.#replaceFormToCard();
   };
 
   #handleFormClose = (point) => {
