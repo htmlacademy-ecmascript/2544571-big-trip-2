@@ -169,6 +169,12 @@ export default class PointEditView extends AbstractStatefulView {
     return createEditNewPointTemplate(this._state, this.#offers, this.#destinations);
   }
 
+  reset(point) {
+    this.updateElement(
+      PointEditView.parsePointToState(point),
+    );
+  }
+
   _restoreHandlers() {
     this.element.querySelector('form')
       .addEventListener('submit', this.#formSubmitHandler);
@@ -187,7 +193,7 @@ export default class PointEditView extends AbstractStatefulView {
 
   #formCloseHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFormClose(PointEditView.parseStateToPoint(this._state));
+    this.#handleFormClose();
   };
 
   #eventTypeToogleHandler = (evt) => {
