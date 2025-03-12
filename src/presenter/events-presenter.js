@@ -43,9 +43,6 @@ export default class EventsPresenter {
   };
 
   #sortPoints(sortType) {
-    // 2. Этот исходный массив задач необходим,
-    // потому что для сортировки мы будем мутировать
-    // массив в свойстве _boardTasks
     switch (sortType) {
       case SortType.TIME:
         this.#eventsPoints.sort(sortPointTime);
