@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { humanizeDateTime } from '../utils/point.js';
 import flatpickr from 'flatpickr';
@@ -154,6 +155,8 @@ export default class PointEditView extends AbstractStatefulView {
 
   #handleFormSubmit = null;
   #handleFormClose = null;
+  #datepickerFrom = null;
+  #datepickerTo = null;
 
 
   constructor({ onFormSubmit, onFormClose, point = BLANK_POINT, offers, destinations }) {
@@ -170,6 +173,21 @@ export default class PointEditView extends AbstractStatefulView {
 
   get template() {
     return createEditNewPointTemplate(this._state, this.#offers, this.#destinations);
+  }
+
+  // Перегружаем метод родителя removeElement,
+  // чтобы при удалении удалялся более не нужный календарь
+  removeElement() {
+    super.removeElement();
+
+    if (this.#datepickerFrom) {
+      this.#datepickerFrom.destroy();
+      this.#datepickerFrom = null;
+    }
+    if (this.#datepickerTo) {
+      this.#datepickerTo.destroy();
+      this.#datepickerTo = null;
+    }
   }
 
   reset(point) {
@@ -189,7 +207,22 @@ export default class PointEditView extends AbstractStatefulView {
       .addEventListener('change', this.#eventDestinationToogleHandler);
     this.element.querySelector('.event__details')
       .addEventListener('change', this.#eventOffersSelectHandler);
+
+    this.#setDatepickerFrom();
+    this.#setDatepickerTo();
   }
+
+  #dateFromChangeHandler = ([userDate]) => {
+    this.updateElement({
+      dateFrom: userDate,
+    });
+  };
+
+  #dateToChangeHandler = ([userDate]) => {
+    this.updateElement({
+      dateTo: userDate,
+    });
+  };
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
@@ -210,7 +243,7 @@ export default class PointEditView extends AbstractStatefulView {
   };
 
   #eventDestinationToogleHandler = (evt) => {
-    evt.preventDefault(); //ищем по названию оффер
+    evt.preventDefault(); //ищем по названию оффер (ниже по коду)
     const newDestination = this.#destinations.find((x) => x.name === evt.target.value);
     if (newDestination === undefined) { //добавляет невозможность ввести что угодно в поле
       const inputElement = this.element.querySelector('.event__input--destination');
@@ -229,6 +262,46 @@ export default class PointEditView extends AbstractStatefulView {
       offers: formData.getAll('offers')
     });
   };
+
+  #setDatepickerFrom() { // может использовать плагин https://flatpickr.js.org/plugins/#rangeplugin-beta где есть два инпута?
+    const dateTo = this._state.dateTo;
+    this.#datepickerFrom = flatpickr(
+      this.element.querySelector('input[name="event-start-time"]'),
+      {
+        'disable': [ // можно сделать disable даты, нельзя сделать disable ВРЕМЕНИ
+          function (date) {
+            return (dayjs(date).isAfter(dateTo, 'day'));
+
+          }
+        ],
+        enableTime: true,
+        dateFormat: 'j/n/y H:i',
+        defaultDate: this._state.dateFrom,
+        'time_24hr': true,
+        onChange: this.#dateFromChangeHandler, // если ставить onClose и нажимать esc во время выбора даты, то вылетает ошибка
+      },
+    );
+  }
+
+  #setDatepickerTo() {
+    const dateFrom = this._state.dateFrom;
+    this.#datepickerFrom = flatpickr(
+      this.element.querySelector('input[name="event-end-time"]'),
+      {
+        'disable': [
+          function (date) {
+            return (dayjs(date).isBefore(dateFrom, 'day'));
+
+          }
+        ],
+        enableTime: true,
+        dateFormat: 'j/n/y H:i',
+        defaultDate: this._state.dateTo,
+        'time_24hr': true,
+        onChange: this.#dateToChangeHandler,
+      },
+    );
+  }
 
   static parsePointToState(point) {
     return {
