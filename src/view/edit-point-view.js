@@ -211,15 +211,15 @@ export default class PointEditView extends AbstractStatefulView {
     this.#setDatepickerTo();
   }
 
-  #dateFromChangeHandler = ([userDate]) => {
+  #dateFromChangeHandler = () => {
     this.updateElement({
-      dateFrom: userDate,
+      dateFrom: this.element.querySelector('.flatpickr-input[name="event-start-time"]').value,
     });
   };
 
-  #dateToChangeHandler = ([userDate]) => {
+  #dateToChangeHandler = () => {
     this.updateElement({
-      dateTo: userDate,
+      dateTo: this.element.querySelector('.flatpickr-input[name="event-end-time"]').value,
     });
   };
 
@@ -267,11 +267,13 @@ export default class PointEditView extends AbstractStatefulView {
       this.element.querySelector('input[name="event-start-time"]'),
       {
         enableTime: true,
-        dateFormat: 'j/n/y H:i',
+        dateFormat: 'Z', // в этом формате передаетя дата в данные (из альтернативного инпута)
         defaultDate: this._state.dateFrom,
         maxDate: this._state.dateTo,
         'time_24hr': true,
         onChange: this.#dateFromChangeHandler,
+        altInput: true,
+        altFormat: 'j/n/y H:i', // в этом формате показывается дата пользователю
       },
     );
   }
@@ -281,11 +283,13 @@ export default class PointEditView extends AbstractStatefulView {
       this.element.querySelector('input[name="event-end-time"]'),
       {
         enableTime: true,
-        dateFormat: 'j/n/y H:i',
+        dateFormat: 'Z',
         defaultDate: this._state.dateTo,
         minDate: this._state.dateFrom,
         'time_24hr': true,
         onChange: this.#dateToChangeHandler, // если ставить onClose и нажимать esc во время выбора даты, то вылетает ошибка
+        altInput: true,
+        altFormat: 'j/n/y H:i',
       },
     );
   }
