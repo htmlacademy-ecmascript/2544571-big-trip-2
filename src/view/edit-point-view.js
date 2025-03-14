@@ -22,7 +22,7 @@ function createOffersEditTemplate(checkedOffers, offersType, allOffers) {
         <input class="event__offer-checkbox  visually-hidden"
         id="${offer.id}"
         type="checkbox"
-        name="event-offer-luggage" ${checkedOffers.includes(offer.id) ? 'checked' : ''}>
+        name="offers" value="${offer.id}" ${checkedOffers.includes(offer.id) ? 'checked' : ''}>
         <label class="event__offer-label" for="${offer.id}">
           <span class="event__offer-title">${offer.title}</span>
           &plus;&euro;&nbsp;
@@ -220,7 +220,11 @@ export default class PointEditView extends AbstractStatefulView {
   };
 
   #eventOffersSelectHandler = (evt) => {
-    console.log(evt.target);
+    evt.preventDefault();
+    const formData = new FormData(this.element.querySelector('form'));
+    this.updateElement({
+      offers: formData.getAll('offers')
+    });
   };
 
   static parsePointToState(point) {
