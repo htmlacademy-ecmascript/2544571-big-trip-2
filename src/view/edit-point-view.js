@@ -127,7 +127,7 @@ function createEditNewPointTemplate(point, offers, destinations) {
                   </button>
                 </header>
                 <section class="event__details">
-                ${offers.find((offer) => offer.type === type).offers ? editOffersTemplate : ''}
+                ${offers.find((offer) => offer.type === type).offers.length ? editOffersTemplate : ''}
                 ${selectedDestination?.description.length || selectedDestination?.pictures.length ? `
                                     <section class="event__section  event__section--destination">
                     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
@@ -184,6 +184,8 @@ export default class PointEditView extends AbstractStatefulView {
       .addEventListener('change', this.#eventTypeToogleHandler);
     this.element.querySelector('.event__input--destination')
       .addEventListener('change', this.#eventDestinationToogleHandler);
+    this.element.querySelector('.event__details')
+      .addEventListener('change', this.#eventOffersSelectHandler);
   }
 
   #formSubmitHandler = (evt) => {
@@ -200,14 +202,14 @@ export default class PointEditView extends AbstractStatefulView {
     evt.preventDefault();
     this.updateElement({
       type: evt.target.value,
-      offers: [] // очистка выбранных офферов - надо ли?
+      offers: [] // очистка выбранных офферов
     });
   };
 
   #eventDestinationToogleHandler = (evt) => {
-    evt.preventDefault(); //ищем по названию, как прокинуть id?
+    evt.preventDefault(); //ищем по названию оффер
     const newDestination = this.#destinations.find((x) => x.name === evt.target.value);
-    if(newDestination === undefined) { //добавляет невозможность ввести что угодно в поле
+    if (newDestination === undefined) { //добавляет невозможность ввести что угодно в поле
       const inputElement = this.element.querySelector('.event__input--destination');
       inputElement.value = inputElement.dataset.destinationName;
       return;
@@ -215,6 +217,10 @@ export default class PointEditView extends AbstractStatefulView {
     this.updateElement({
       destination: newDestination.id,
     });
+  };
+
+  #eventOffersSelectHandler = (evt) => {
+    console.log(evt.target);
   };
 
   static parsePointToState(point) {
