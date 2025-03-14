@@ -42,10 +42,7 @@ export default class EventsPresenter {
     this.#pointPresenters.get(updatedPoint.id).init(updatedPoint, this.#offers, this.#destinations);
   };
 
-  #sortTasks(sortType) {
-    // 2. Этот исходный массив задач необходим,
-    // потому что для сортировки мы будем мутировать
-    // массив в свойстве _boardTasks
+  #sortPoints(sortType) {
     switch (sortType) {
       case SortType.TIME:
         this.#eventsPoints.sort(sortPointTime);
@@ -65,7 +62,7 @@ export default class EventsPresenter {
       return;
     }
 
-    this.#sortTasks(sortType);
+    this.#sortPoints(sortType);
     this.#clearPointList();
     this.#renderPointsList();
   };
