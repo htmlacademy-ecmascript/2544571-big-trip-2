@@ -20,10 +20,10 @@ function createOffersEditTemplate(checkedOffers, offersType, allOffers) {
   const offersElements = selectedTypeOffersList.map((offer) =>
     `<div class="event__offer-selector">
         <input class="event__offer-checkbox  visually-hidden"
-        id="event-offer-luggage-1"
+        id="${offer.id}"
         type="checkbox"
         name="event-offer-luggage" ${checkedOffers.includes(offer.id) ? 'checked' : ''}>
-        <label class="event__offer-label" for="event-offer-luggage-1">
+        <label class="event__offer-label" for="${offer.id}">
           <span class="event__offer-title">${offer.title}</span>
           &plus;&euro;&nbsp;
           <span class="event__offer-price">${offer.price}</span>
