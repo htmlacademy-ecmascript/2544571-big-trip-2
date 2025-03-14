@@ -271,13 +271,13 @@ export default class PointEditView extends AbstractStatefulView {
         defaultDate: this._state.dateFrom,
         maxDate: this._state.dateTo,
         'time_24hr': true,
-        onChange: this.#dateFromChangeHandler, // здесь onchange ведет себя как onclose (???)
+        onChange: this.#dateFromChangeHandler,
       },
     );
   }
 
   #setDatepickerTo() {
-    this.#datepickerFrom = flatpickr(
+    this.#datepickerTo = flatpickr(
       this.element.querySelector('input[name="event-end-time"]'),
       {
         enableTime: true,
