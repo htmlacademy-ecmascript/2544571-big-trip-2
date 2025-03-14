@@ -264,19 +264,13 @@ export default class PointEditView extends AbstractStatefulView {
   };
 
   #setDatepickerFrom() { // может использовать плагин https://flatpickr.js.org/plugins/#rangeplugin-beta где есть два инпута?
-    const dateTo = this._state.dateTo;
     this.#datepickerFrom = flatpickr(
       this.element.querySelector('input[name="event-start-time"]'),
       {
-        'disable': [ // можно сделать disable даты, нельзя сделать disable ВРЕМЕНИ
-          function (date) {
-            return (dayjs(date).isAfter(dateTo, 'day'));
-
-          }
-        ],
         enableTime: true,
         dateFormat: 'j/n/y H:i',
         defaultDate: this._state.dateFrom,
+        maxDate: this._state.dateTo,
         'time_24hr': true,
         onChange: this.#dateFromChangeHandler, // здесь onchange ведет себя как onclose (???)
       },
@@ -284,19 +278,13 @@ export default class PointEditView extends AbstractStatefulView {
   }
 
   #setDatepickerTo() {
-    const dateFrom = this._state.dateFrom;
     this.#datepickerFrom = flatpickr(
       this.element.querySelector('input[name="event-end-time"]'),
       {
-        'disable': [
-          function (date) {
-            return (dayjs(date).isBefore(dateFrom, 'day'));
-
-          }
-        ],
         enableTime: true,
         dateFormat: 'j/n/y H:i',
         defaultDate: this._state.dateTo,
+        minDate: this._state.dateFrom,
         'time_24hr': true,
         onChange: this.#dateToChangeHandler, // если ставить onClose и нажимать esc во время выбора даты, то вылетает ошибка
       },
