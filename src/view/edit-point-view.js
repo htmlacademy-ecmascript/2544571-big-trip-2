@@ -278,7 +278,7 @@ export default class PointEditView extends AbstractStatefulView {
         dateFormat: 'j/n/y H:i',
         defaultDate: this._state.dateFrom,
         'time_24hr': true,
-        onChange: this.#dateFromChangeHandler, // если ставить onClose и нажимать esc во время выбора даты, то вылетает ошибка
+        onChange: this.#dateFromChangeHandler, // здесь onchange ведет себя как onclose (???)
       },
     );
   }
@@ -298,7 +298,7 @@ export default class PointEditView extends AbstractStatefulView {
         dateFormat: 'j/n/y H:i',
         defaultDate: this._state.dateTo,
         'time_24hr': true,
-        onChange: this.#dateToChangeHandler,
+        onChange: this.#dateToChangeHandler, // если ставить onClose и нажимать esc во время выбора даты, то вылетает ошибка
       },
     );
   }
