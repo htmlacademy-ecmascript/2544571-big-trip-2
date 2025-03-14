@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { humanizeDateTime } from '../utils/point.js';
 import flatpickr from 'flatpickr';
