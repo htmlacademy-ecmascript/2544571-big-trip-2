@@ -215,12 +215,14 @@ export default class PointEditView extends AbstractStatefulView {
     this._setState({
       dateFrom: this.element.querySelector('.flatpickr-input[name="event-start-time"]').value,
     });
+    this.#datepickerTo.set('minDate',this.element.querySelector('.flatpickr-input[name="event-start-time"]').value);
   };
 
   #dateToChangeHandler = () => {
     this._setState({
       dateTo: this.element.querySelector('.flatpickr-input[name="event-end-time"]').value,
     });
+    this.#datepickerFrom.set('maxDate',this.element.querySelector('.flatpickr-input[name="event-end-time"]').value);
   };
 
   #formSubmitHandler = (evt) => {
@@ -262,7 +264,7 @@ export default class PointEditView extends AbstractStatefulView {
     });
   };
 
-  #setDatepickerFrom() { // может использовать плагин https://flatpickr.js.org/plugins/#rangeplugin-beta где есть два инпута?
+  #setDatepickerFrom() {
     this.#datepickerFrom = flatpickr(
       this.element.querySelector('input[name="event-start-time"]'),
       {
@@ -288,7 +290,7 @@ export default class PointEditView extends AbstractStatefulView {
         defaultDate: this._state.dateTo,
         minDate: this._state.dateFrom,
         'time_24hr': true,
-        onClose: this.#dateToChangeHandler, // если ставить onClose и нажимать esc во время выбора даты, то вылетает ошибка
+        onClose: this.#dateToChangeHandler,
         altInput: true,
         altFormat: 'j/n/y H:i',
         minuteIncrement: 1,
