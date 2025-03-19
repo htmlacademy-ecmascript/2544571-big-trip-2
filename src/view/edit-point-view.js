@@ -1,5 +1,8 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { humanizeDateTime } from '../utils/point.js';
+import flatpickr from 'flatpickr';
+
+import 'flatpickr/dist/flatpickr.min.css';
 
 const BLANK_POINT = {
   'id': '007',
@@ -151,6 +154,8 @@ export default class PointEditView extends AbstractStatefulView {
 
   #handleFormSubmit = null;
   #handleFormClose = null;
+  #datepickerFrom = null;
+  #datepickerTo = null;
 
 
   constructor({ onFormSubmit, onFormClose, point = BLANK_POINT, offers, destinations }) {
@@ -167,6 +172,21 @@ export default class PointEditView extends AbstractStatefulView {
 
   get template() {
     return createEditNewPointTemplate(this._state, this.#offers, this.#destinations);
+  }
+
+  // Перегружаем метод родителя removeElement,
+  // чтобы при удалении удалялся более не нужный календарь
+  removeElement() {
+    super.removeElement();
+
+    if (this.#datepickerFrom) {
+      this.#datepickerFrom.destroy();
+      this.#datepickerFrom = null;
+    }
+    if (this.#datepickerTo) {
+      this.#datepickerTo.destroy();
+      this.#datepickerTo = null;
+    }
   }
 
   reset(point) {
@@ -186,7 +206,24 @@ export default class PointEditView extends AbstractStatefulView {
       .addEventListener('change', this.#eventDestinationToogleHandler);
     this.element.querySelector('.event__details')
       .addEventListener('change', this.#eventOffersSelectHandler);
+
+    this.#setDatepickerFrom();
+    this.#setDatepickerTo();
   }
+
+  #dateFromChangeHandler = () => {
+    this._setState({
+      dateFrom: this.element.querySelector('.flatpickr-input[name="event-start-time"]').value,
+    });
+    this.#datepickerTo.set('minDate',this.element.querySelector('.flatpickr-input[name="event-start-time"]').value);
+  };
+
+  #dateToChangeHandler = () => {
+    this._setState({
+      dateTo: this.element.querySelector('.flatpickr-input[name="event-end-time"]').value,
+    });
+    this.#datepickerFrom.set('maxDate',this.element.querySelector('.flatpickr-input[name="event-end-time"]').value);
+  };
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
@@ -207,7 +244,7 @@ export default class PointEditView extends AbstractStatefulView {
   };
 
   #eventDestinationToogleHandler = (evt) => {
-    evt.preventDefault(); //ищем по названию оффер
+    evt.preventDefault(); //ищем по названию оффер (ниже по коду)
     const newDestination = this.#destinations.find((x) => x.name === evt.target.value);
     if (newDestination === undefined) { //добавляет невозможность ввести что угодно в поле
       const inputElement = this.element.querySelector('.event__input--destination');
@@ -226,6 +263,39 @@ export default class PointEditView extends AbstractStatefulView {
       offers: formData.getAll('offers')
     });
   };
+
+  #datepickerConfig = {
+    minuteIncrement: 1,
+    enableTime: true,
+    dateFormat: 'Z',
+    'time_24hr': true,
+    altInput: true,
+    altFormat: 'j/n/y H:i',
+  };
+
+  #setDatepickerFrom() {
+    this.#datepickerFrom = flatpickr(
+      this.element.querySelector('input[name="event-start-time"]'),
+      {
+        defaultDate: this._state.dateFrom,
+        maxDate: this._state.dateTo,
+        onClose: this.#dateFromChangeHandler,
+        ...this.#datepickerConfig
+      },
+    );
+  }
+
+  #setDatepickerTo() {
+    this.#datepickerTo = flatpickr(
+      this.element.querySelector('input[name="event-end-time"]'),
+      {
+        defaultDate: this._state.dateTo,
+        minDate: this._state.dateFrom,
+        onClose: this.#dateToChangeHandler,
+        ...this.#datepickerConfig
+      },
+    );
+  }
 
   static parsePointToState(point) {
     return {
