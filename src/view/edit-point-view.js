@@ -264,19 +264,23 @@ export default class PointEditView extends AbstractStatefulView {
     });
   };
 
+  #datepickerConfig = {
+    minuteIncrement: 1,
+    enableTime: true,
+    dateFormat: 'Z',
+    'time_24hr': true,
+    altInput: true,
+    altFormat: 'j/n/y H:i',
+  };
+
   #setDatepickerFrom() {
     this.#datepickerFrom = flatpickr(
       this.element.querySelector('input[name="event-start-time"]'),
       {
-        enableTime: true,
-        dateFormat: 'Z', // в этом формате передаетя дата в данные (из альтернативного инпута)
         defaultDate: this._state.dateFrom,
         maxDate: this._state.dateTo,
-        'time_24hr': true,
         onClose: this.#dateFromChangeHandler,
-        altInput: true,
-        altFormat: 'j/n/y H:i', // в этом формате показывается дата пользователю
-        minuteIncrement: 1,
+        ...this.#datepickerConfig
       },
     );
   }
@@ -285,15 +289,10 @@ export default class PointEditView extends AbstractStatefulView {
     this.#datepickerTo = flatpickr(
       this.element.querySelector('input[name="event-end-time"]'),
       {
-        enableTime: true,
-        dateFormat: 'Z',
         defaultDate: this._state.dateTo,
         minDate: this._state.dateFrom,
-        'time_24hr': true,
         onClose: this.#dateToChangeHandler,
-        altInput: true,
-        altFormat: 'j/n/y H:i',
-        minuteIncrement: 1,
+        ...this.#datepickerConfig
       },
     );
   }
