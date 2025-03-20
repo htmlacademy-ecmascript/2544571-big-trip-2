@@ -73,7 +73,7 @@ export default class EventsPresenter {
         this.#renderBoard();
         break;
       case UpdateType.MAJOR:
-        this.#clearBoard({resetSortType: true}); // у них тут еще сброс счетчика
+        this.#clearBoard({ resetSortType: true }); // у них тут еще сброс счетчика
         this.#renderBoard();
         break;
     }
@@ -85,7 +85,7 @@ export default class EventsPresenter {
     }
 
     this.#currentSortType = sortType;
-    this.#clearBoard({resetRenderedTaskCount: true});
+    this.#clearBoard();
     this.#renderBoard();
   };
 
@@ -116,20 +116,9 @@ export default class EventsPresenter {
     render(this.#noPointsComponent, this.#eventsContainer, RenderPosition.AFTERBEGIN);
   }
 
-  #clearPointList() {
-    this.#pointPresenters.forEach((presenter) => presenter.destroy());
-    this.#pointPresenters.clear();
-  }
+  //здесь в демке рендер кнопки "покзатать еще"
 
-  #renderPointsList() {
-    // здесь у них счетчик отрисованных и порционная отрисовка
-    const points = this.points;
-    render(this.#listComponent, this.#eventsContainer);
-    this.#renderPoints(points);
-    // здесь у них логика отрисовки loadMoreButton
-  }
-
-  #clearBoard({resetSortType = false} = {}) {
+  #clearBoard({ resetSortType = false } = {}) {
     // здесь у них переменная для счетчика задач
 
     this.#pointPresenters.forEach((presenter) => presenter.destroy());

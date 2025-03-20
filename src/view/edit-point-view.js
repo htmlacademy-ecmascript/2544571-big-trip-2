@@ -154,17 +154,18 @@ export default class PointEditView extends AbstractStatefulView {
 
   #handleFormSubmit = null;
   #handleFormClose = null;
+  #handleDeleteClick = null;
   #datepickerFrom = null;
   #datepickerTo = null;
 
-
-  constructor({ onFormSubmit, onFormClose, point = BLANK_POINT, offers, destinations }) {
+  constructor({ onFormSubmit, onDeleteClick, onFormClose, point = BLANK_POINT, offers, destinations }) {
     super();
     this._setState(PointEditView.parsePointToState(point));
     this.#offers = offers;
     this.#destinations = destinations;
 
     this.#handleFormSubmit = onFormSubmit;
+    this.#handleDeleteClick = onDeleteClick;
     this.#handleFormClose = onFormClose;
 
     this._restoreHandlers();
@@ -206,6 +207,8 @@ export default class PointEditView extends AbstractStatefulView {
       .addEventListener('change', this.#eventDestinationToogleHandler);
     this.element.querySelector('.event__details')
       .addEventListener('change', this.#eventOffersSelectHandler);
+    this.element.querySelector('.event__reset-btn')
+      .addEventListener('click', this.#formDeleteClickHandler);
 
     this.#setDatepickerFrom();
     this.#setDatepickerTo();
@@ -215,14 +218,14 @@ export default class PointEditView extends AbstractStatefulView {
     this._setState({
       dateFrom: this.element.querySelector('.flatpickr-input[name="event-start-time"]').value,
     });
-    this.#datepickerTo.set('minDate',this.element.querySelector('.flatpickr-input[name="event-start-time"]').value);
+    this.#datepickerTo.set('minDate', this.element.querySelector('.flatpickr-input[name="event-start-time"]').value);
   };
 
   #dateToChangeHandler = () => {
     this._setState({
       dateTo: this.element.querySelector('.flatpickr-input[name="event-end-time"]').value,
     });
-    this.#datepickerFrom.set('maxDate',this.element.querySelector('.flatpickr-input[name="event-end-time"]').value);
+    this.#datepickerFrom.set('maxDate', this.element.querySelector('.flatpickr-input[name="event-end-time"]').value);
   };
 
   #formSubmitHandler = (evt) => {
@@ -296,6 +299,11 @@ export default class PointEditView extends AbstractStatefulView {
       },
     );
   }
+
+  #formDeleteClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleDeleteClick(PointEditView.parseStateToPoint(this._state));
+  };
 
   static parsePointToState(point) {
     return {
