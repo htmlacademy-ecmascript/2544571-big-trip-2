@@ -1,6 +1,6 @@
+import { render, RenderPosition, remove } from '../framework/render.js';
 import TripEventsListView from '../view/trip-events-list-view.js';
 import TripSortView from '../view/trip-sort-view.js';
-import { render, RenderPosition } from '../framework/render.js';
 import NoPointsView from '../view/no-points-view.js';
 import PointPresenter from './point-presenter.js';
 import { sortPointDay, sortPointTime, sortPointPrice } from '../utils/point.js';
@@ -64,18 +64,17 @@ export default class EventsPresenter {
   };
 
   #handleModelEvent = (updateType, data) => {
-    console.log(updateType, data);
-    // В зависимости от типа изменений решаем, что делать:
     switch (updateType) {
       case UpdateType.PATCH:
-        // - обновить часть списка (например, когда поменялось описание)
         this.#pointPresenters.get(data.id).init(data);
         break;
       case UpdateType.MINOR:
-        // - обновить список (например, когда задача ушла в архив)
+        this.#clearBoard();
+        this.#renderBoard();
         break;
       case UpdateType.MAJOR:
-        // - обновить всю доску (например, при переключении фильтра)
+        this.#clearBoard({resetSortType: true}); // у них тут еще сброс счетчика
+        this.#renderBoard();
         break;
     }
   };
@@ -86,12 +85,13 @@ export default class EventsPresenter {
     }
 
     this.#currentSortType = sortType;
-    this.#clearPointList();
-    this.#renderPointsList();
+    this.#clearBoard({resetRenderedTaskCount: true});
+    this.#renderBoard();
   };
 
   #renderSort() {
     this.#sortComponent = new TripSortView({
+      currentSortType: this.#currentSortType,
       onSortTypeChange: this.#handleSortTypeChange
     });
 
@@ -129,16 +129,37 @@ export default class EventsPresenter {
     // здесь у них логика отрисовки loadMoreButton
   }
 
+  #clearBoard({resetSortType = false} = {}) {
+    // здесь у них переменная для счетчика задач
+
+    this.#pointPresenters.forEach((presenter) => presenter.destroy());
+    this.#pointPresenters.clear();
+
+    remove(this.#sortComponent);
+    remove(this.#noPointsComponent);
+
+    //Здесь у них условие на счетчик задач
+
+    if (resetSortType) {
+      this.#currentSortType = SortType.DAY;
+    }
+  }
+
   #renderBoard() {
+    // здесь они рисуют доп элемент, который нам не нужен
     this.#offers = this.#eventsModel.offers;
     this.#destinations = this.#eventsModel.destinations;
 
-    if (this.points.length === 0) {
+    const points = this.points;
+    const pointCount = points.length;
+
+    if (pointCount === 0) {
       this.#renderNoPoints();
       return;
     }
 
     this.#renderSort();
-    this.#renderPointsList();
+    render(this.#listComponent, this.#eventsContainer);
+    this.#renderPoints(points);
   }
 }
