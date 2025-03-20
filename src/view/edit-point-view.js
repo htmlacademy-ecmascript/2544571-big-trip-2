@@ -262,7 +262,7 @@ export default class PointEditView extends AbstractStatefulView {
   #eventOffersSelectHandler = (evt) => {
     evt.preventDefault();
     const formData = new FormData(this.element.querySelector('form'));
-    this.updateElement({
+    this._setState({ //ставим _setState
       offers: formData.getAll('offers')
     });
   };
