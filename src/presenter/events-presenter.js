@@ -1,11 +1,10 @@
 import TripEventsListView from '../view/trip-events-list-view.js';
 import TripSortView from '../view/trip-sort-view.js';
-import { render, RenderPosition} from '../framework/render.js';
+import { render, RenderPosition } from '../framework/render.js';
 import NoPointsView from '../view/no-points-view.js';
 import PointPresenter from './point-presenter.js';
-import {updateItem} from '../utils/common.js';
-import {sortPointDay, sortPointTime, sortPointPrice} from '../utils/point.js';
-import {SortType} from '../const.js';
+import { sortPointDay, sortPointTime, sortPointPrice } from '../utils/point.js';
+import { SortType } from '../const.js';
 
 export default class EventsPresenter {
   #eventsContainer = null;
@@ -15,7 +14,6 @@ export default class EventsPresenter {
   #sortComponent = null;
   #noPointsComponent = new NoPointsView();
 
-  #eventsPoints = [];
   #offers = null;
   #destinations = null;
   #pointPresenters = new Map();
@@ -26,47 +24,40 @@ export default class EventsPresenter {
     this.#eventsModel = eventsModel;
   }
 
-  get tasks() {
-    return this.#eventsModel.points;
+  get points() {
+    switch (this.#currentSortType) {
+      case SortType.DAY:
+        return [...this.#eventsModel.points].sort(sortPointDay);
+      case SortType.PRICE:
+        return [...this.#eventsModel.points].sort(sortPointPrice);
+      case SortType.TIME:
+        return [...this.#eventsModel.points].sort(sortPointTime);
+    }
+    return this.#eventsModel.points; // на всякий случай оставим
   }
 
   init() {
-    this.#eventsPoints = [...this.#eventsModel.points];
-    this.#eventsPoints.sort(sortPointDay);
-
     this.#renderBoard();
   }
+
+  // #handleLoadMoreButtonClick = () => {
+  // здвесь у них обработчик кнопки "показать еще"
 
   #handleModeChange = () => {
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
   };
 
   #handlePointChange = (updatedPoint) => {
-    this.#eventsPoints = updateItem(this.#eventsPoints, updatedPoint);
+    // Здесь будем вызывать обновление модели
     this.#pointPresenters.get(updatedPoint.id).init(updatedPoint, this.#offers, this.#destinations);
   };
-
-  #sortPoints(sortType) {
-    switch (sortType) {
-      case SortType.TIME:
-        this.#eventsPoints.sort(sortPointTime);
-        break;
-      case SortType.PRICE:
-        this.#eventsPoints.sort(sortPointPrice);
-        break;
-      default:
-        this.#eventsPoints.sort(sortPointDay);
-    }
-
-    this.#currentSortType = sortType;
-  }
 
   #handleSortTypeChange = (sortType) => {
     if (this.#currentSortType === sortType) {
       return;
     }
 
-    this.#sortPoints(sortType);
+    this.#currentSortType = sortType;
     this.#clearPointList();
     this.#renderPointsList();
   };
@@ -89,9 +80,8 @@ export default class EventsPresenter {
     this.#pointPresenters.set(point.id, pointPresenter);
   }
 
-  #renderPoints() {
-    this.#eventsPoints
-      .forEach((point) => this.#renderPoint(point));
+  #renderPoints(points) {
+    points.forEach((point) => this.#renderPoint(point));
   }
 
   #renderNoPoints() {
@@ -104,16 +94,18 @@ export default class EventsPresenter {
   }
 
   #renderPointsList() {
+    // здесь у них счетчик отрисованных и порционная отрисовка
+    const points = this.points;
     render(this.#listComponent, this.#eventsContainer);
-    this.#renderPoints();
-
+    this.#renderPoints(points);
+    // здесь у них логика отрисовки loadMoreButton
   }
 
   #renderBoard() {
     this.#offers = this.#eventsModel.offers;
     this.#destinations = this.#eventsModel.destinations;
 
-    if (this.#eventsPoints.length === 0) {
+    if (this.points.length === 0) {
       this.#renderNoPoints();
       return;
     }
