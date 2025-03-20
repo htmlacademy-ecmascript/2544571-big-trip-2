@@ -1,15 +1,8 @@
-import {render} from './framework/render.js';
-import FiltersView from './view/filters-view.js';
+// import {render} from './framework/render.js'; //для отрисовки кнопки новой задачи
 import EventsPresenter from './presenter/events-presenter.js';
+import FilterPresenter from './presenter/filter-presenter.js';
 import EventsModel from './model/events-model.js';
 import FilterModel from './model/filter-model.js';
-
-const filters = [
-  {
-    type: 'everything',
-    count: 0,
-  },
-];
 
 const filtersContainer = document.querySelector('.trip-controls__filters');
 const tripEventsContainer = document.querySelector('.trip-events');
@@ -19,11 +12,14 @@ const eventsPresenter = new EventsPresenter({
   eventsContainer: tripEventsContainer,
   eventsModel
 });
+const filterPresenter = new FilterPresenter({
+  filterContainer: filtersContainer,
+  filterModel,
+  eventsModel
+});
 
-render(new FiltersView({
-  filters,
-  currentFilterType: 'everything',
-  onFilterTypeChange: () => {}
-}), filtersContainer);
+// в демо проекте здесь отрисовка кнопки новой задачи
+
+filterPresenter.init();
 eventsPresenter.init();
 
