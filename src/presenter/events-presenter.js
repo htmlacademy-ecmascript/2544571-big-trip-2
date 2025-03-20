@@ -5,7 +5,7 @@ import NoPointsView from '../view/no-points-view.js';
 import PointPresenter from './point-presenter.js';
 import { sortPointDay, sortPointTime, sortPointPrice } from '../utils/point.js';
 import {filter} from '../utils/filter.js';
-import { SortType, UpdateType, UserAction } from '../const.js';
+import { SortType, UpdateType, UserAction, FilterType } from '../const.js';
 
 export default class EventsPresenter {
   #eventsContainer = null;
@@ -14,12 +14,13 @@ export default class EventsPresenter {
 
   #listComponent = new TripEventsListView();
   #sortComponent = null;
-  #noPointsComponent = new NoPointsView();
+  #noPointsComponent = null;
 
   #offers = null;
   #destinations = null;
   #pointPresenters = new Map();
   #currentSortType = SortType.DAY;
+  #filterType = FilterType.EVERYTHING;
 
   constructor({ eventsContainer, eventsModel, filterModel }) {
     this.#eventsContainer = eventsContainer;
@@ -31,9 +32,9 @@ export default class EventsPresenter {
   }
 
   get points() {
-    const filterType = this.#filterModel.filter;
+    this.#filterType = this.#filterModel.filter;
     const points = this.#eventsModel.points;
-    const filteredPoints = filter[filterType](points);
+    const filteredPoints = filter[this.#filterType](points);
     switch (this.#currentSortType) {
       case SortType.DAY:
         return filteredPoints.sort(sortPointDay);
@@ -120,6 +121,10 @@ export default class EventsPresenter {
   }
 
   #renderNoPoints() {
+    this.#noPointsComponent = new NoPointsView({
+      filterType: this.#filterType
+    });
+
     render(this.#noPointsComponent, this.#eventsContainer, RenderPosition.AFTERBEGIN);
   }
 
@@ -132,9 +137,13 @@ export default class EventsPresenter {
     this.#pointPresenters.clear();
 
     remove(this.#sortComponent);
-    remove(this.#noPointsComponent);
+    // в демке здесь удаление кнопки "загрузить еще"
 
-    //Здесь у них условие на счетчик задач
+    if (this.#noPointsComponent) {
+      remove(this.#noPointsComponent);
+    }
+
+    //Здесь в демке условие на счетчик задач
 
     if (resetSortType) {
       this.#currentSortType = SortType.DAY;
