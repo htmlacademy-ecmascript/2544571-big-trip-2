@@ -10,7 +10,8 @@ const eventsModel = new EventsModel();
 const filterModel = new FilterModel();
 const eventsPresenter = new EventsPresenter({
   eventsContainer: tripEventsContainer,
-  eventsModel
+  eventsModel,
+  filterModel,
 });
 const filterPresenter = new FilterPresenter({
   filterContainer: filtersContainer,
