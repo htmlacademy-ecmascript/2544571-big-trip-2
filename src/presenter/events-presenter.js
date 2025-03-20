@@ -26,6 +26,10 @@ export default class EventsPresenter {
     this.#eventsModel = eventsModel;
   }
 
+  get tasks() {
+    return this.#eventsModel.points;
+  }
+
   init() {
     this.#eventsPoints = [...this.#eventsModel.points];
     this.#eventsPoints.sort(sortPointDay);
