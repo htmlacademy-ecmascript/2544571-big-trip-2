@@ -24,7 +24,8 @@ export default class NewPointPresenter {
       offers: eventsModel.offers,
       destinations: eventsModel.destinations,
       onFormSubmit: this.#handleFormSubmit,
-      onDeleteClick: this.#handleDeleteClick
+      onDeleteClick: this.#handleDeleteClick,
+      createMode: true
     });
 
     render(this.#pointEditComponent, this.#pointListContainer, RenderPosition.AFTERBEGIN);
