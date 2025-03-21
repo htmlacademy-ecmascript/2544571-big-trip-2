@@ -18,7 +18,7 @@ const BLANK_POINT = {
 const EVENT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 
 function createOffersEditTemplate(checkedOffers, offersType, allOffers) {
-  const selectedTypeOffersList = allOffers.find((offer) => offer.type === offersType).offers;
+  const selectedTypeOffersList = allOffers ? allOffers.find((offer) => offer.type === offersType).offers : [];
 
   const offersElements = selectedTypeOffersList.map((offer) =>
     `<div class="event__offer-selector">
@@ -42,7 +42,7 @@ function createOffersEditTemplate(checkedOffers, offersType, allOffers) {
 }
 
 function createPicturesTemplate(destinationInfo) {
-  const picturesList = destinationInfo.pictures;
+  const picturesList = destinationInfo ? destinationInfo.pictures : [] ;
 
   return (picturesList.map((picture) =>
     `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`).join(''));
@@ -65,12 +65,12 @@ function createEditNewPointTemplate(point, offers, destinations) {
 
   const { dateTo, dateFrom, type, offers: pointOffers, destination: pointDestination, basePrice } = point;
 
-  const selectedDestination = destinations.find((x) => x.id === pointDestination);
+  const selectedDestination = destinations ? destinations.find((x) => x.id === pointDestination) : [] ;
 
   const editOffersTemplate = createOffersEditTemplate(pointOffers, type, offers);
   const picturesTemplate = createPicturesTemplate(selectedDestination);
 
-  const destinationName = selectedDestination.name;
+  const destinationName = selectedDestination ? selectedDestination.name : '';
 
   const humanizedTimeFrom = humanizeDateTime(dateFrom);
   const humanizedTimeTo = humanizeDateTime(dateTo);
