@@ -327,6 +327,69 @@ const mockPointsList = [
   }
 ];
 
+// const emptyPointsList = [ //массив с пустыми точками для теста
+//   {
+//     'id': '007',
+//     'basePrice': 0,
+//     'dateFrom': '',
+//     'dateTo': '',
+//     'destination': '',
+//     'isFavorite': false,
+//     'offers': [],
+//     'type': 'taxi'
+//   },
+//   {
+//     'id': '008',
+//     'basePrice': 0,
+//     'dateFrom': '',
+//     'dateTo': '',
+//     'destination': '',
+//     'isFavorite': false,
+//     'offers': [],
+//     'type': 'taxi'
+//   },
+//   {
+//     'id': '009',
+//     'basePrice': 0,
+//     'dateFrom': '',
+//     'dateTo': '',
+//     'destination': '',
+//     'isFavorite': false,
+//     'offers': [],
+//     'type': 'taxi'
+//   },
+//   {
+//     'id': '010',
+//     'basePrice': 0,
+//     'dateFrom': '',
+//     'dateTo': '',
+//     'destination': '',
+//     'isFavorite': false,
+//     'offers': [],
+//     'type': 'taxi'
+//   },
+//   {
+//     'id': '011',
+//     'basePrice': 0,
+//     'dateFrom': '',
+//     'dateTo': '',
+//     'destination': '',
+//     'isFavorite': false,
+//     'offers': [],
+//     'type': 'taxi'
+//   },
+//   {
+//     'id': '012',
+//     'basePrice': 0,
+//     'dateFrom': '',
+//     'dateTo': '',
+//     'destination': '',
+//     'isFavorite': false,
+//     'offers': [],
+//     'type': 'taxi'
+//   },
+// ];
+
 function getRandomPoint() {
   return getRandomArrayElement(mockPointsList);
 }

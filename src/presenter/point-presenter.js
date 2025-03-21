@@ -1,6 +1,7 @@
 import { render, replace, remove } from '../framework/render.js';
 import PointView from '../view/point-view.js';
-import EditPointView from '../view/edit-point-view.js';
+import PointEditView from '../view/edit-point-view.js';
+import { UserAction, UpdateType } from '../const.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -41,10 +42,12 @@ export default class PointPresenter {
       onFavoriteClick: this.#handleFavoriteClick,
     });
 
-    this.#pointEditComponent = new EditPointView({
+    this.#pointEditComponent = new PointEditView({
       point: this.#point, offers: this.#offers, destinations: this.#destinations,
       onFormSubmit: this.#handleFormSubmit,
       onFormClose: this.#handleFormClose,
+      onDeleteClick: this.#handleDeleteClick,
+      createMode: false
     });
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
@@ -97,21 +100,37 @@ export default class PointPresenter {
     }
   };
 
+  #handleFormClose = () => { //делаем по аналогии с escKeyDownHandler
+    this.#pointEditComponent.reset(this.#point);
+    this.#replaceFormToCard();
+  };
+
   #handleEditClick = () => {
     this.#replaceCardToForm();
   };
 
   #handleFavoriteClick = () => {
-    this.#handleDataChange({ ...this.#point, isFavorite: !this.#point.isFavorite });
+    this.#handleDataChange(
+      UserAction.UPDATE_POINT,
+      UpdateType.MINOR,
+      { ...this.#point, isFavorite: !this.#point.isFavorite },
+    );
   };
 
-  #handleFormSubmit = (point) => {
-    this.#handleDataChange(point);
+  #handleFormSubmit = (update) => {
+    this.#handleDataChange(
+      UserAction.UPDATE_POINT,
+      UpdateType.MINOR,
+      update,
+    );
     this.#replaceFormToCard();
   };
 
-  #handleFormClose = () => {
-    this.#pointEditComponent.reset(this.#point);
-    this.#replaceFormToCard();
+  #handleDeleteClick = (point) => {
+    this.#handleDataChange(
+      UserAction.DELETE_POINT,
+      UpdateType.MINOR,
+      point,
+    );
   };
 }

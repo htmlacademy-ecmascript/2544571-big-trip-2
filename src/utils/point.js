@@ -65,4 +65,11 @@ function sortPointPrice(pointB, pointA) {
   return pointA.basePrice - pointB.basePrice;
 }
 
-export {sortPointPrice, sortPointTime, sortPointDay, isPointSameOrInPast, isPointSameOrInFuture, isPointInFuture, isPointInPast, humanizeDate, getTimeDifference, humanizeDateTime, humanizeTime };
+// ниже - функция для сравнения дат, она нужна чтобы
+// запускать перерисовку списка. вопрос - какие еще
+// изменения должны запускать такую перерисовку?
+function isDatesEqual(dateA, dateB) { // грануляция - ДЕНЬ!
+  return (dateA === null && dateB === null) || dayjs(dateA).isSame(dateB, 'D');
+}
+
+export {isDatesEqual, sortPointPrice, sortPointTime, sortPointDay, isPointSameOrInPast, isPointSameOrInFuture, isPointInFuture, isPointInPast, humanizeDate, getTimeDifference, humanizeDateTime, humanizeTime };

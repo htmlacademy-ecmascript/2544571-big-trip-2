@@ -1,3 +1,4 @@
+import he from 'he';
 import AbstractView from '../framework/view/abstract-view.js';
 import { humanizeDate, getTimeDifference, humanizeTime } from '../utils/point.js';
 
@@ -28,23 +29,23 @@ function createPointTemplate(point, offers, destinations) {
   const selectedDestination = destinations.find((x) => x.id === pointDestination);
 
   const humanizedPointDateFrom = humanizeDate(dateFrom);
-  const timeDifference = getTimeDifference(dateTo, dateFrom);
+  const timeDifference = dateTo && dateFrom ? getTimeDifference(dateTo, dateFrom) : '';
   const humanizedTimeFrom = humanizeTime(dateFrom);
   const humanizedTimeTo = humanizeTime(dateTo);
   const selectedOffersTemplate = createSelectedOffersTemplate(pointOffers, offers);
 
   return (`<li class="trip-events__item">
               <div class="event">
-                <time class="event__date" datetime="2019-03-18">${humanizedPointDateFrom}</time>
+                <time class="event__date" datetime="${dateFrom}">${humanizedPointDateFrom}</time>
                 <div class="event__type">
                   <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
                 </div>
-                <h3 class="event__title">${type} ${selectedDestination.name}</h3>
+                <h3 class="event__title">${type} ${he.encode(selectedDestination ? selectedDestination.name : '')}</h3>
                 <div class="event__schedule">
                   <p class="event__time">
-                    <time class="event__start-time" datetime="2019-03-18T10:30">${humanizedTimeFrom}</time>
+                    <time class="event__start-time" datetime="${dateFrom}">${humanizedTimeFrom}</time>
                     &mdash;
-                    <time class="event__end-time" datetime="2019-03-18T11:00">${humanizedTimeTo}</time>
+                    <time class="event__end-time" datetime="${dateTo}">${humanizedTimeTo}</time>
                   </p>
                   <p class="event__duration">${timeDifference}</p>
                 </div>
