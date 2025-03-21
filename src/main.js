@@ -16,15 +16,30 @@ const eventsPresenter = new EventsPresenter({
   eventsContainer: tripEventsContainer,
   eventsModel,
   filterModel,
+  onNewPointDestroy: handleNewPointFormClose
 });
 const filterPresenter = new FilterPresenter({
   filterContainer: filtersContainer,
   filterModel,
-  eventsModel
+  eventsModel,
 });
 
 render(new TripInfoView(), siteHeaderElement, RenderPosition.AFTERBEGIN); // элемент для доп задания
-render(new NewPointButtonView(), siteHeaderElement);
+
+const newPointButtonComponent = new NewPointButtonView({
+  onClick: handleNewPointButtonClick
+});
+
+function handleNewPointFormClose() {
+  newPointButtonComponent.element.disabled = false;
+}
+
+function handleNewPointButtonClick() {
+  eventsPresenter.createPoint();
+  newPointButtonComponent.element.disabled = true;
+}
+
+render(newPointButtonComponent, siteHeaderElement);
 
 filterPresenter.init();
 eventsPresenter.init();

@@ -12,7 +12,7 @@ const BLANK_POINT = {
   'destination': null,
   'isFavorite': false,
   'offers': [],
-  'type': 'taxi'
+  'type': 'flight'
 };
 
 const EVENT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
