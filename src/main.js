@@ -1,4 +1,4 @@
-import {render} from './framework/render.js';
+import { render } from './framework/render.js';
 import { RenderPosition } from './framework/render.js';
 import NewPointButtonView from './view/new-point-button-view.js';
 import TripInfoView from './view/trip-info-view.js';
@@ -46,9 +46,10 @@ function handleNewPointButtonClick() {
   newPointButtonComponent.element.disabled = true;
 }
 
-render(newPointButtonComponent, siteHeaderElement);
-
 filterPresenter.init();
 eventsPresenter.init();
-eventsModel.init();
+eventsModel.init()
+  .finally(() => {
+    render(newPointButtonComponent, siteHeaderElement);
+  });
 
