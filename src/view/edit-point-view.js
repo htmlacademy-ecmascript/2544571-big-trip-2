@@ -284,7 +284,6 @@ export default class PointEditView extends AbstractStatefulView {
   #datepickerConfig = {
     minuteIncrement: 1,
     enableTime: true,
-    dateFormat: 'Z',
     'time_24hr': true,
     altInput: true,
     altFormat: 'j/n/y H:i',
