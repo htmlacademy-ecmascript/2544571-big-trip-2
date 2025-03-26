@@ -228,18 +228,18 @@ export default class PointEditView extends AbstractStatefulView {
     });
   };
 
-  #dateFromChangeHandler = () => {
+  #dateFromChangeHandler = ([userDate]) => {
     this._setState({
-      dateFrom: this.element.querySelector('.flatpickr-input[name="event-start-time"]').value,
+      dateFrom: userDate,
     });
-    this.#datepickerTo.set('minDate', this.element.querySelector('.flatpickr-input[name="event-start-time"]').value);
+    this.#datepickerTo.set('minDate', userDate);
   };
 
-  #dateToChangeHandler = () => {
+  #dateToChangeHandler = ([userDate]) => {
     this._setState({
-      dateTo: this.element.querySelector('.flatpickr-input[name="event-end-time"]').value,
+      dateTo: userDate,
     });
-    this.#datepickerFrom.set('maxDate', this.element.querySelector('.flatpickr-input[name="event-end-time"]').value);
+    this.#datepickerFrom.set('maxDate', userDate);
   };
 
   #formSubmitHandler = (evt) => {
@@ -285,8 +285,7 @@ export default class PointEditView extends AbstractStatefulView {
     minuteIncrement: 1,
     enableTime: true,
     'time_24hr': true,
-    altInput: true,
-    altFormat: 'j/n/y H:i',
+    dateFormat: 'j/n/y H:i',
   };
 
   #setDatepickerFrom() {
