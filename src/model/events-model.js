@@ -17,11 +17,7 @@ export default class EventsModel extends Observable {
     this.#pointsApiService = pointsApiService;
 
     this.#pointsApiService.points.then((points) => {
-      console.log(points);
-      // Есть проблема: cтруктура объекта похожа, но некоторые ключи называются иначе,
-      // а ещё на сервере используется snake_case, а у нас camelCase.
-      // Можно, конечно, переписать часть нашего клиентского приложения, но зачем?
-      // Есть вариант получше - паттерн "Адаптер"
+      console.log(points.map(this.#adaptToClient));
     });
     this.#pointsApiService.offers.then((offers) => {
       console.log(offers);
@@ -81,5 +77,23 @@ export default class EventsModel extends Observable {
     ];
 
     this._notify(updateType);
+  }
+
+
+  #adaptToClient(point) {
+    const adaptedPoint = {...point,
+      dateFrom: point['date_from'] !== null ? new Date(point['date_from']) : point['date_from'],
+      dateTo: point['date_to'] !== null ? new Date(point['date_to']) : point['date_to'],
+      isFavorite: point['is_favorite'],
+      basePrice: point['base_price'],
+    };
+
+    // Ненужные ключи мы удаляем
+    delete adaptedPoint['date_from'];
+    delete adaptedPoint['date_to'];
+    delete adaptedPoint['base_price'];
+    delete adaptedPoint['is_favorite'];
+
+    return adaptedPoint;
   }
 }
