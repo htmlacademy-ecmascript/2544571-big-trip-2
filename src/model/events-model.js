@@ -1,5 +1,5 @@
 import Observable from '../framework/observable.js';
-import {UpdateType} from '../const.js';
+import { UpdateType } from '../const.js';
 
 export default class EventsModel extends Observable {
   #pointsApiService = null;
@@ -8,7 +8,7 @@ export default class EventsModel extends Observable {
   #offers = [];
 
 
-  constructor({pointsApiService}) {
+  constructor({ pointsApiService }) {
     super();
     this.#pointsApiService = pointsApiService;
   }
@@ -29,39 +29,45 @@ export default class EventsModel extends Observable {
     try {
       const points = await this.#pointsApiService.points;
       this.#points = points.map(this.#adaptToClient);
-    } catch(err) {
+    } catch (err) {
       this.#points = [];
     }
     try {
       const offers = await this.#pointsApiService.offers;
       this.#offers = offers;
-    } catch(err) {
+    } catch (err) {
       this.#offers = [];
     }
     try {
       const destinations = await this.#pointsApiService.destinations;
       this.#destinations = destinations;
-    } catch(err) {
+    } catch (err) {
       this.#destinations = [];
     }
 
     this._notify(UpdateType.INIT);
   }
 
-  updatePoint(updateType, update) {
+  async updatePoint(updateType, update) {
     const index = this.#points.findIndex((point) => point.id === update.id);
 
     if (index === -1) {
       throw new Error('Can\'t update unexisting point');
     }
 
-    this.#points = [
-      ...this.#points.slice(0, index),
-      update,
-      ...this.#points.slice(index + 1),
-    ];
+    try {
+      const response = await this.#pointsApiService.updatePoint(update);
+      const updatedPoint = this.#adaptToClient(response);
+      this.#points = [
+        ...this.#points.slice(0, index),
+        updatedPoint,
+        ...this.#points.slice(index + 1),
+      ];
 
-    this._notify(updateType, update);
+      this._notify(updateType, updatedPoint);
+    } catch (err) {
+      throw new Error('Can\'t update point');
+    }
   }
 
   addPoint(updateType, update) {
@@ -90,7 +96,8 @@ export default class EventsModel extends Observable {
 
 
   #adaptToClient(point) {
-    const adaptedPoint = {...point,
+    const adaptedPoint = {
+      ...point,
       dateFrom: point['date_from'] !== null ? new Date(point['date_from']) : point['date_from'],
       dateTo: point['date_to'] !== null ? new Date(point['date_to']) : point['date_to'],
       isFavorite: point['is_favorite'],
