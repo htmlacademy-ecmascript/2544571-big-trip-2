@@ -50,4 +50,5 @@ render(newPointButtonComponent, siteHeaderElement);
 
 filterPresenter.init();
 eventsPresenter.init();
+eventsModel.init();
 
