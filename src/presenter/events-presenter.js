@@ -2,10 +2,11 @@ import { render, RenderPosition, remove } from '../framework/render.js';
 import TripEventsListView from '../view/trip-events-list-view.js';
 import TripSortView from '../view/trip-sort-view.js';
 import NoPointsView from '../view/no-points-view.js';
+import LoadingView from '../view/loading-view.js';
 import PointPresenter from './point-presenter.js';
 import NewPointPresenter from './new-point-presenter.js';
 import { sortPointDay, sortPointTime, sortPointPrice } from '../utils/point.js';
-import {filter} from '../utils/filter.js';
+import { filter } from '../utils/filter.js';
 import { SortType, UpdateType, UserAction, FilterType } from '../const.js';
 
 export default class EventsPresenter {
@@ -14,6 +15,7 @@ export default class EventsPresenter {
   #filterModel = null;
 
   #listComponent = new TripEventsListView();
+  #loadingComponent = new LoadingView();
   #sortComponent = null;
   #noPointsComponent = null;
 
@@ -23,6 +25,7 @@ export default class EventsPresenter {
   #newPointPresenter = null;
   #currentSortType = SortType.DAY;
   #filterType = FilterType.EVERYTHING;
+  #isLoading = true;
 
   constructor({ eventsContainer, eventsModel, filterModel, onNewPointDestroy }) {
     this.#eventsContainer = eventsContainer;
@@ -99,6 +102,11 @@ export default class EventsPresenter {
         this.#clearBoard({ resetSortType: true }); // у них тут еще сброс счетчика
         this.#renderBoard();
         break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderBoard();
+        break;
     }
   };
 
@@ -135,6 +143,10 @@ export default class EventsPresenter {
     points.forEach((point) => this.#renderPoint(point));
   }
 
+  #renderLoading() {
+    render(this.#loadingComponent, this.#eventsContainer, RenderPosition.AFTERBEGIN);
+  }
+
   #renderNoPoints() {
     this.#noPointsComponent = new NoPointsView({
       filterType: this.#filterType
@@ -153,6 +165,7 @@ export default class EventsPresenter {
     this.#pointPresenters.clear();
 
     remove(this.#sortComponent);
+    remove(this.#loadingComponent);
     // в демке здесь удаление кнопки "загрузить еще"
 
     if (this.#noPointsComponent) {
@@ -168,6 +181,12 @@ export default class EventsPresenter {
 
   #renderBoard() {
     // здесь они рисуют доп элемент, который нам не нужен
+
+    if (this.#isLoading) {
+      this.#renderLoading();
+      return;
+    }
+
     this.#offers = this.#eventsModel.offers;
     this.#destinations = this.#eventsModel.destinations;
 
