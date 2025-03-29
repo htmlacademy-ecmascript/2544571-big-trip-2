@@ -6,14 +6,8 @@ function createNewTripInfoTemplate(eventsModel) {
 
   const getDestinationName = (point) => eventsModel.destinations.find((x) => x.id === point.destination)?.name;
 
-
-
-  const firstPoint = sortedPoints[0];
-  console.log(firstPoint);
-  console.log(eventsModel.destinations);
-
-  const firstPointDestination = eventsModel.destinations.find((x) => x.id === firstPoint.destination);
-  console.log(firstPointDestination);
+  // console.log(firstPoint);
+  // console.log(eventsModel.destinations);
 
   return `  <section class="trip-main__trip-info  trip-info">
             <div class="trip-info__main">
