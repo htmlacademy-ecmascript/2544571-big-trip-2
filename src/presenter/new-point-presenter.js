@@ -1,6 +1,6 @@
-import {remove, render, RenderPosition} from '../framework/render.js';
+import { remove, render, RenderPosition } from '../framework/render.js';
 import PointEditView from '../view/edit-point-view.js';
-import {UserAction, UpdateType} from '../const.js';
+import { UserAction, UpdateType } from '../const.js';
 
 export default class NewPointPresenter {
   #pointListContainer = null;
@@ -9,7 +9,7 @@ export default class NewPointPresenter {
 
   #pointEditComponent = null;
 
-  constructor({pointListContainer, onDataChange, onDestroy}) {
+  constructor({ pointListContainer, onDataChange, onDestroy }) {
     this.#pointListContainer = pointListContainer;
     this.#handleDataChange = onDataChange;
     this.#handleDestroy = onDestroy;
@@ -46,15 +46,32 @@ export default class NewPointPresenter {
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
 
+  setSaving() {
+    this.#pointEditComponent.updateElement({
+      isDisabled: true,
+      isSaving: true,
+    });
+  }
+
+
+  setAborting() {
+    const resetFormState = () => {
+      this.#pointEditComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#pointEditComponent.shake(resetFormState);
+  }
+
   #handleFormSubmit = (point) => {
     this.#handleDataChange(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
-      // Пока у нас нет сервера, который бы после сохранения
-      // выдывал честный id задачи, нам нужно позаботиться об этом самим
-      {id: 'dfdffsdf', ...point},
+      point,
     );
-    this.destroy();
   };
 
   #handleDeleteClick = () => {
