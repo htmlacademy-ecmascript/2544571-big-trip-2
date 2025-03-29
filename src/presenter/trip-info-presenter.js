@@ -27,7 +27,7 @@ export default class TripInfoPresenter {
   init() {
     const prevTripInfoComponent = this.#tripInfoComponent;
 
-    this.#tripInfoComponent = new TripInfoView(this.#eventsModel.points);
+    this.#tripInfoComponent = new TripInfoView(this.#eventsModel);
 
     if (prevTripInfoComponent === null) {
       render(this.#tripInfoComponent, this.#tripInfoContainer, RenderPosition.AFTERBEGIN);

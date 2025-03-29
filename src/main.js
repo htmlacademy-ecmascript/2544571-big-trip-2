@@ -49,10 +49,11 @@ function handleNewPointButtonClick() {
 }
 
 filterPresenter.init();
-tripInfoPresenter.init();
+
 eventsPresenter.init();
 eventsModel.init()
   .finally(() => {
     render(newPointButtonComponent, siteHeaderElement);
+    tripInfoPresenter.init();
   });
 
