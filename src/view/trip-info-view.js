@@ -8,11 +8,17 @@ function createNewTripInfoTemplate(eventsModel) {
   }
 
   const sortedPoints = eventsModel.points.sort(sortPointDay);
+  const getDestinationName = (destination) => eventsModel.destinations.find((x) => x.id === destination)?.name;
 
-  const getDestinationName = (point) => eventsModel.destinations.find((x) => x.id === point.destination)?.name;
+  const uniqDestinations = [];
+  sortedPoints.forEach((element) => {
+    if (element.destination !== uniqDestinations[uniqDestinations.length - 1]) {
+      uniqDestinations.push(element.destination);
+    }
+  });
 
-  // console.log(firstPoint);
-  // console.log(eventsModel.destinations);
+  const uniqDestinationsNames = uniqDestinations.map((element) => getDestinationName(element));
+  console.log(uniqDestinationsNames);
 
   return `  <section class="trip-main__trip-info  trip-info">
             <div class="trip-info__main">

@@ -154,7 +154,7 @@ export default class EventsPresenter {
       onSortTypeChange: this.#handleSortTypeChange
     });
 
-    render(this.#sortComponent, this.#listComponent.element, RenderPosition.AFTERBEGIN);
+    render(this.#sortComponent, this.#eventsContainer, RenderPosition.AFTERBEGIN);
   }
 
   #renderPoint(point) {
