@@ -16,9 +16,6 @@ export default class TripInfoPresenter {
 
   init() {
     const prevTripInfoComponent = this.#tripInfoComponent;
-    if (this.#eventsModel.points.length === 0 || this.#eventsModel.destinations.length === 0) {
-      return;
-    } // условие, чтобы отрисовка происходила только если данные есть
 
     this.#tripInfoComponent = new TripInfoView(this.#eventsModel);
 

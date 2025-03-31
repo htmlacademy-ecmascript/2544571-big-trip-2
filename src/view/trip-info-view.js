@@ -2,6 +2,11 @@ import AbstractView from '../framework/view/abstract-view.js';
 import { sortPointDay } from '../utils/point.js';
 
 function createNewTripInfoTemplate(eventsModel) {
+  if (eventsModel.points.length === 0) {
+    return `  <section class="trip-main__trip-info  trip-info">
+          </section>`;
+  }
+
   const sortedPoints = eventsModel.points.sort(sortPointDay);
 
   const getDestinationName = (point) => eventsModel.destinations.find((x) => x.id === point.destination)?.name;
