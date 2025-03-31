@@ -1,5 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { sortPointDay } from '../utils/point.js';
+import dayjs from 'dayjs';
 
 function createNewTripInfoTemplate(eventsModel) {
   if (eventsModel.points.length === 0) {
@@ -24,11 +25,18 @@ function createNewTripInfoTemplate(eventsModel) {
   const lastPointName = uniqDestinationsNames.length > 1 ? `&mdash; ${uniqDestinationsNames[uniqDestinationsNames.length - 1]}` : '';
   const dots = uniqDestinationsNames.length > 3 ? '&mdash; ...' : '';
 
+  const isMonthYearEqual = (firstDate, secondDate) => dayjs(firstDate).format('MM YYYY') === dayjs(secondDate).format('MM YYYY');
+  const startDate = sortedPoints[0].dateFrom;
+  const endDate = sortedPoints[sortedPoints.length - 1].dateTo;
+
+  const humanizedStartDate = isMonthYearEqual(startDate, endDate) ? dayjs(startDate).format('D') : dayjs(startDate).format('D MMM');
+  const humanizedEndDate = dayjs(endDate).format('D MMM');
+
   return `  <section class="trip-main__trip-info  trip-info">
             <div class="trip-info__main">
               <h1 class="trip-info__title">${firstPointName} ${secondPointName} ${dots} ${lastPointName} </h1>
 
-              <p class="trip-info__dates">18&nbsp;&mdash;&nbsp;20 Mar</p>
+              <p class="trip-info__dates">${humanizedStartDate}&nbsp;&mdash;&nbsp;${humanizedEndDate}</p>
             </div>
 
             <p class="trip-info__cost">
