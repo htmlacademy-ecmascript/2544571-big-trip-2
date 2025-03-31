@@ -18,11 +18,15 @@ function createNewTripInfoTemplate(eventsModel) {
   });
 
   const uniqDestinationsNames = uniqDestinations.map((element) => getDestinationName(element));
-  console.log(uniqDestinationsNames);
+
+  const firstPointName = uniqDestinationsNames[0];
+  const secondPointName = uniqDestinationsNames.length === 3 ? `&mdash; ${uniqDestinationsNames[1]}` : '';
+  const lastPointName = uniqDestinationsNames.length > 1 ? `&mdash; ${uniqDestinationsNames[uniqDestinationsNames.length - 1]}` : '';
+  const dots = uniqDestinationsNames.length > 3 ? '&mdash; ...' : '';
 
   return `  <section class="trip-main__trip-info  trip-info">
             <div class="trip-info__main">
-              <h1 class="trip-info__title">Amsterdam &mdash; Chamonix &mdash; Geneva ${eventsModel.points.length}${getDestinationName(sortedPoints[0])} </h1>
+              <h1 class="trip-info__title">${firstPointName} ${secondPointName} ${dots} ${lastPointName} </h1>
 
               <p class="trip-info__dates">18&nbsp;&mdash;&nbsp;20 Mar</p>
             </div>
