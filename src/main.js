@@ -7,8 +7,10 @@ import FilterModel from './model/filter-model.js';
 import PointsApiService from './points-api-service.js';
 import TripInfoPresenter from './presenter/trip-info-presenter.js';
 
-const AUTHORIZATION = 'Basic cooperfirewalk';
-const END_POINT = 'https://22.objects.htmlacademy.pro/big-trip';
+const AUTHORIZATION = 'Basic cooperfirewalk3';
+// const END_POINT = 'https://22.objects.htmlacademy.pro/big-trip';
+const END_POINT = 'https://23.objects.htmlacademy.pro/big-trip'; // адрес для тестов
+
 
 const siteHeaderElement = document.querySelector('.trip-main');
 const filtersContainer = siteHeaderElement.querySelector('.trip-controls__filters');
