@@ -92,7 +92,7 @@ export default class EventsPresenter {
         this.#pointPresenters.get(update.id).setSaving();
         try {
           await this.#eventsModel.updatePoint(updateType, update);
-        } catch(err) {
+        } catch (err) {
           this.#pointPresenters.get(update.id).setAborting();
         }
         break;
@@ -100,7 +100,7 @@ export default class EventsPresenter {
         this.#newPointPresenter.setSaving();
         try {
           await this.#eventsModel.addPoint(updateType, update);
-        } catch(err) {
+        } catch (err) {
           this.#newPointPresenter.setAborting();
         }
         break;
@@ -108,7 +108,7 @@ export default class EventsPresenter {
         this.#pointPresenters.get(update.id).setDeleting();
         try {
           await this.#eventsModel.deletePoint(updateType, update);
-        } catch(err) {
+        } catch (err) {
           this.#pointPresenters.get(update.id).setAborting();
         }
         break;
@@ -221,13 +221,15 @@ export default class EventsPresenter {
     const points = this.points;
     const pointCount = points.length;
 
+    render(this.#listComponent, this.#eventsContainer);
+
     if (pointCount === 0) {
       this.#renderNoPoints();
       return;
     }
 
     this.#renderSort();
-    render(this.#listComponent, this.#eventsContainer);
+
     this.#renderPoints(points);
   }
 }
