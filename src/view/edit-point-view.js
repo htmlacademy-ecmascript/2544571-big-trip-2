@@ -79,7 +79,7 @@ function createEditNewPointTemplate(point, offers, destinations, createMode) {
 
   const eventTypesTemplate = createEventTypesTemplate(type);
 
-  const isSubmitDisabled = (dateFrom === null) || (dateTo === null);
+  const isSubmitDisabled = (dateFrom === null) || (dateTo === null) || (dateFrom.getTime() === dateTo.getTime());
 
   return (`<li class="trip-events__item">
               <form class="event event--edit" action="#" method="post">
@@ -125,7 +125,7 @@ function createEditNewPointTemplate(point, offers, destinations, createMode) {
                     <input class="event__input  event__input--price" id="event-price-1" type="number" required min="1" max="100000" step="1" name="event-price" value="${basePrice}">
                   </div>
 
-                  <button class="event__save-btn  btn  btn--blue" type="submit" ${isSubmitDisabled || isDisabled ? 'disabled' : ''} >${isSaving ? 'saving...' : 'save'}</button>
+                  <button class="event__save-btn  btn  btn--blue" type="submit" ${(isSubmitDisabled || isDisabled) ? 'disabled' : ''} >${isSaving ? 'saving...' : 'save'}</button>
                   <button class="event__reset-btn" type="reset">${(createMode ? 'Cancel' : null) || (isDeleting ? 'deleting...' : 'delete')}</button>
                   ${!createMode ? `<button class="event__rollup-btn" type="button">
                     <span class="visually-hidden">Open event</span>
@@ -230,14 +230,14 @@ export default class PointEditView extends AbstractStatefulView {
   };
 
   #dateFromChangeHandler = ([userDate]) => {
-    this._setState({
+    this.updateElement({
       dateFrom: userDate,
     });
     this.#datepickerTo.set('minDate', userDate);
   };
 
   #dateToChangeHandler = ([userDate]) => {
-    this._setState({
+    this.updateElement({
       dateTo: userDate,
     });
     this.#datepickerFrom.set('maxDate', userDate);
