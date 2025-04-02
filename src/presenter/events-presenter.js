@@ -4,6 +4,7 @@ import TripEventsListView from '../view/trip-events-list-view.js';
 import TripSortView from '../view/trip-sort-view.js';
 import NoPointsView from '../view/no-points-view.js';
 import LoadingView from '../view/loading-view.js';
+import FailedLoad from '../view/failed-load-view.js';
 import PointPresenter from './point-presenter.js';
 import NewPointPresenter from './new-point-presenter.js';
 import { sortPointDay, sortPointTime, sortPointPrice } from '../utils/point.js';
@@ -21,6 +22,7 @@ export default class EventsPresenter {
 
   #listComponent = new TripEventsListView();
   #loadingComponent = new LoadingView();
+  #failedLoadComponent = new FailedLoad();
   #sortComponent = null;
   #noPointsComponent = null;
 
@@ -31,6 +33,7 @@ export default class EventsPresenter {
   #currentSortType = SortType.DAY;
   #filterType = FilterType.EVERYTHING;
   #isLoading = true;
+  #isFailLoad = false;
   #uiBlocker = new UiBlocker({
     lowerLimit: TimeLimit.LOWER_LIMIT,
     upperLimit: TimeLimit.UPPER_LIMIT
@@ -135,6 +138,12 @@ export default class EventsPresenter {
         remove(this.#loadingComponent);
         this.#renderBoard();
         break;
+      case UpdateType.FAILURE:
+        this.#isLoading = false;
+        this.#isFailLoad = true;
+        remove(this.#loadingComponent);
+        this.#renderBoard();
+        break;
     }
   };
 
@@ -175,6 +184,10 @@ export default class EventsPresenter {
     render(this.#loadingComponent, this.#eventsContainer, RenderPosition.AFTERBEGIN);
   }
 
+  #renderFailedLoad() {
+    render(this.#failedLoadComponent, this.#eventsContainer, RenderPosition.AFTERBEGIN);
+  }
+
   #renderNoPoints() {
     this.#noPointsComponent = new NoPointsView({
       filterType: this.#filterType
@@ -194,6 +207,7 @@ export default class EventsPresenter {
 
     remove(this.#sortComponent);
     remove(this.#loadingComponent);
+    remove(this.#failedLoadComponent);
     // в демке здесь удаление кнопки "загрузить еще"
 
     if (this.#noPointsComponent) {
@@ -209,6 +223,11 @@ export default class EventsPresenter {
 
   #renderBoard() {
     // здесь они рисуют доп элемент, который нам не нужен
+
+    if (this.#isFailLoad) {
+      this.#renderFailedLoad();
+      return;
+    }
 
     if (this.#isLoading) {
       this.#renderLoading();
