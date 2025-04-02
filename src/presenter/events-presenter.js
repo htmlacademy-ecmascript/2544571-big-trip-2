@@ -4,7 +4,7 @@ import TripEventsListView from '../view/trip-events-list-view.js';
 import TripSortView from '../view/trip-sort-view.js';
 import NoPointsView from '../view/no-points-view.js';
 import LoadingView from '../view/loading-view.js';
-import FailedLoad from '../view/failed-load-view.js';
+import FailedLoadView from '../view/failed-load-view.js';
 import PointPresenter from './point-presenter.js';
 import NewPointPresenter from './new-point-presenter.js';
 import { sortPointDay, sortPointTime, sortPointPrice } from '../utils/point.js';
@@ -22,7 +22,7 @@ export default class EventsPresenter {
 
   #listComponent = new TripEventsListView();
   #loadingComponent = new LoadingView();
-  #failedLoadComponent = new FailedLoad();
+  #failedLoadComponent = new FailedLoadView();
   #sortComponent = null;
   #noPointsComponent = null;
 

@@ -8,7 +8,7 @@ function createFailedLoadTemplate() {
   );
 }
 
-export default class FailedLoad extends AbstractView {
+export default class FailedLoadView extends AbstractView {
   get template() {
     return createFailedLoadTemplate();
   }
