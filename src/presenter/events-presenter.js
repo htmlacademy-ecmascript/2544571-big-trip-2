@@ -44,10 +44,19 @@ export default class EventsPresenter {
     this.#eventsModel = eventsModel;
     this.#filterModel = filterModel;
 
+    const renderNoPointsWithCondition = () => {
+      onNewPointDestroy();
+      const points = this.points;
+      const pointCount = points.length;
+      if (pointCount === 0) {
+        this.#renderNoPoints();
+      }
+    };
+
     this.#newPointPresenter = new NewPointPresenter({
       pointListContainer: this.#listComponent.element,
       onDataChange: this.#handleViewAction,
-      onDestroy: onNewPointDestroy
+      onDestroy: renderNoPointsWithCondition
     });
 
     this.#eventsModel.addObserver(this.#handleModelEvent);
@@ -77,6 +86,9 @@ export default class EventsPresenter {
     this.#currentSortType = SortType.DAY;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this.#newPointPresenter.init(this.#eventsModel);
+    if (this.#noPointsComponent) {
+      remove(this.#noPointsComponent);
+    }
   }
 
   // #handleLoadMoreButtonClick = () => {
