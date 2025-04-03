@@ -79,7 +79,7 @@ function createEditNewPointTemplate(point, offers, destinations, createMode) {
 
   const eventTypesTemplate = createEventTypesTemplate(type);
 
-  const isSubmitDisabled = (dateFrom === null) || (dateTo === null);
+  const isSubmitDisabled = (dateFrom === null) || (dateTo === null) || (dateFrom.getTime() === dateTo.getTime());
 
   return (`<li class="trip-events__item">
               <form class="event event--edit" action="#" method="post">
@@ -125,7 +125,7 @@ function createEditNewPointTemplate(point, offers, destinations, createMode) {
                     <input class="event__input  event__input--price" id="event-price-1" type="number" required min="1" max="100000" step="1" name="event-price" value="${basePrice}">
                   </div>
 
-                  <button class="event__save-btn  btn  btn--blue" type="submit" ${isSubmitDisabled || isDisabled ? 'disabled' : ''} >${isSaving ? 'saving...' : 'save'}</button>
+                  <button class="event__save-btn  btn  btn--blue" type="submit" ${(isSubmitDisabled || isDisabled) ? 'disabled' : ''} >${isSaving ? 'saving...' : 'save'}</button>
                   <button class="event__reset-btn" type="reset">${(createMode ? 'Cancel' : null) || (isDeleting ? 'deleting...' : 'delete')}</button>
                   ${!createMode ? `<button class="event__rollup-btn" type="button">
                     <span class="visually-hidden">Open event</span>
@@ -179,8 +179,6 @@ export default class PointEditView extends AbstractStatefulView {
     return createEditNewPointTemplate(this._state, this.#offers, this.#destinations, this.#createMode);
   }
 
-  // Перегружаем метод родителя removeElement,
-  // чтобы при удалении удалялся более не нужный календарь
   removeElement() {
     super.removeElement();
 
@@ -230,14 +228,14 @@ export default class PointEditView extends AbstractStatefulView {
   };
 
   #dateFromChangeHandler = ([userDate]) => {
-    this._setState({
+    this.updateElement({
       dateFrom: userDate,
     });
     this.#datepickerTo.set('minDate', userDate);
   };
 
   #dateToChangeHandler = ([userDate]) => {
-    this._setState({
+    this.updateElement({
       dateTo: userDate,
     });
     this.#datepickerFrom.set('maxDate', userDate);
@@ -257,14 +255,14 @@ export default class PointEditView extends AbstractStatefulView {
     evt.preventDefault();
     this.updateElement({
       type: evt.target.value,
-      offers: [] // очистка выбранных офферов
+      offers: []
     });
   };
 
   #eventDestinationToogleHandler = (evt) => {
-    evt.preventDefault(); //ищем по названию оффер (ниже по коду)
+    evt.preventDefault();
     const newDestination = this.#destinations.find((x) => x.name === evt.target.value);
-    if (newDestination === undefined) { //добавляет невозможность ввести что угодно в поле
+    if (newDestination === undefined) {
       const inputElement = this.element.querySelector('.event__input--destination');
       inputElement.value = inputElement.dataset.destinationName;
       return;
@@ -277,7 +275,7 @@ export default class PointEditView extends AbstractStatefulView {
   #eventOffersSelectHandler = (evt) => {
     evt.preventDefault();
     const formData = new FormData(this.element.querySelector('form'));
-    this._setState({ //ставим _setState
+    this._setState({
       offers: formData.getAll('offers')
     });
   };

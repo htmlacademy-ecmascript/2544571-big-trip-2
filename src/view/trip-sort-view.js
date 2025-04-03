@@ -39,7 +39,6 @@ export default class TripSortView extends AbstractView {
     this.#currentSortType = currentSortType;
     this.#handleSortTypeChange = onSortTypeChange;
 
-    // у них обработчик срабатывает на клик (см ниже)
     this.element.addEventListener('change', this.#sortTypeChangeHandler);
   }
 
@@ -48,7 +47,6 @@ export default class TripSortView extends AbstractView {
   }
 
   #sortTypeChangeHandler = (evt) => {
-    // у них здесь проверка на тип элемента по которому кликнули
 
     evt.preventDefault();
     this.#handleSortTypeChange(evt.target.dataset.sortType);

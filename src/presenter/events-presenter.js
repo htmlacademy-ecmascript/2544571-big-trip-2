@@ -4,6 +4,7 @@ import TripEventsListView from '../view/trip-events-list-view.js';
 import TripSortView from '../view/trip-sort-view.js';
 import NoPointsView from '../view/no-points-view.js';
 import LoadingView from '../view/loading-view.js';
+import FailedLoadView from '../view/failed-load-view.js';
 import PointPresenter from './point-presenter.js';
 import NewPointPresenter from './new-point-presenter.js';
 import { sortPointDay, sortPointTime, sortPointPrice } from '../utils/point.js';
@@ -21,6 +22,7 @@ export default class EventsPresenter {
 
   #listComponent = new TripEventsListView();
   #loadingComponent = new LoadingView();
+  #failedLoadComponent = new FailedLoadView();
   #sortComponent = null;
   #noPointsComponent = null;
 
@@ -31,6 +33,7 @@ export default class EventsPresenter {
   #currentSortType = SortType.DAY;
   #filterType = FilterType.EVERYTHING;
   #isLoading = true;
+  #isFailLoad = false;
   #uiBlocker = new UiBlocker({
     lowerLimit: TimeLimit.LOWER_LIMIT,
     upperLimit: TimeLimit.UPPER_LIMIT
@@ -41,10 +44,19 @@ export default class EventsPresenter {
     this.#eventsModel = eventsModel;
     this.#filterModel = filterModel;
 
+    const renderNoPointsWithCondition = () => {
+      onNewPointDestroy();
+      const points = this.points;
+      const pointCount = points.length;
+      if (pointCount === 0) {
+        this.#renderNoPoints();
+      }
+    };
+
     this.#newPointPresenter = new NewPointPresenter({
       pointListContainer: this.#listComponent.element,
       onDataChange: this.#handleViewAction,
-      onDestroy: onNewPointDestroy
+      onDestroy: renderNoPointsWithCondition
     });
 
     this.#eventsModel.addObserver(this.#handleModelEvent);
@@ -63,7 +75,7 @@ export default class EventsPresenter {
       case SortType.TIME:
         return filteredPoints.sort(sortPointTime);
     }
-    return filteredPoints; // на всякий случай оставим
+    return filteredPoints;
   }
 
   init() {
@@ -74,10 +86,10 @@ export default class EventsPresenter {
     this.#currentSortType = SortType.DAY;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this.#newPointPresenter.init(this.#eventsModel);
+    if (this.#noPointsComponent) {
+      remove(this.#noPointsComponent);
+    }
   }
-
-  // #handleLoadMoreButtonClick = () => {
-  // здвесь у них обработчик кнопки "показать еще"
 
   #handleModeChange = () => {
     this.#newPointPresenter.destroy();
@@ -92,7 +104,7 @@ export default class EventsPresenter {
         this.#pointPresenters.get(update.id).setSaving();
         try {
           await this.#eventsModel.updatePoint(updateType, update);
-        } catch(err) {
+        } catch (err) {
           this.#pointPresenters.get(update.id).setAborting();
         }
         break;
@@ -100,7 +112,7 @@ export default class EventsPresenter {
         this.#newPointPresenter.setSaving();
         try {
           await this.#eventsModel.addPoint(updateType, update);
-        } catch(err) {
+        } catch (err) {
           this.#newPointPresenter.setAborting();
         }
         break;
@@ -108,7 +120,7 @@ export default class EventsPresenter {
         this.#pointPresenters.get(update.id).setDeleting();
         try {
           await this.#eventsModel.deletePoint(updateType, update);
-        } catch(err) {
+        } catch (err) {
           this.#pointPresenters.get(update.id).setAborting();
         }
         break;
@@ -135,6 +147,12 @@ export default class EventsPresenter {
         remove(this.#loadingComponent);
         this.#renderBoard();
         break;
+      case UpdateType.FAILURE:
+        this.#isLoading = false;
+        this.#isFailLoad = true;
+        remove(this.#loadingComponent);
+        this.#renderBoard();
+        break;
     }
   };
 
@@ -154,7 +172,7 @@ export default class EventsPresenter {
       onSortTypeChange: this.#handleSortTypeChange
     });
 
-    render(this.#sortComponent, this.#listComponent.element, RenderPosition.AFTERBEGIN);
+    render(this.#sortComponent, this.#eventsContainer, RenderPosition.AFTERBEGIN);
   }
 
   #renderPoint(point) {
@@ -175,6 +193,10 @@ export default class EventsPresenter {
     render(this.#loadingComponent, this.#eventsContainer, RenderPosition.AFTERBEGIN);
   }
 
+  #renderFailedLoad() {
+    render(this.#failedLoadComponent, this.#eventsContainer, RenderPosition.AFTERBEGIN);
+  }
+
   #renderNoPoints() {
     this.#noPointsComponent = new NoPointsView({
       filterType: this.#filterType
@@ -183,10 +205,7 @@ export default class EventsPresenter {
     render(this.#noPointsComponent, this.#eventsContainer, RenderPosition.AFTERBEGIN);
   }
 
-  //здесь в демке рендер кнопки "покзатать еще"
-
   #clearBoard({ resetSortType = false } = {}) {
-    // здесь у них переменная для счетчика задач
 
     this.#newPointPresenter.destroy();
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
@@ -194,13 +213,11 @@ export default class EventsPresenter {
 
     remove(this.#sortComponent);
     remove(this.#loadingComponent);
-    // в демке здесь удаление кнопки "загрузить еще"
+    remove(this.#failedLoadComponent);
 
     if (this.#noPointsComponent) {
       remove(this.#noPointsComponent);
     }
-
-    //Здесь в демке условие на счетчик задач
 
     if (resetSortType) {
       this.#currentSortType = SortType.DAY;
@@ -208,7 +225,11 @@ export default class EventsPresenter {
   }
 
   #renderBoard() {
-    // здесь они рисуют доп элемент, который нам не нужен
+
+    if (this.#isFailLoad) {
+      this.#renderFailedLoad();
+      return;
+    }
 
     if (this.#isLoading) {
       this.#renderLoading();
@@ -221,13 +242,15 @@ export default class EventsPresenter {
     const points = this.points;
     const pointCount = points.length;
 
+    render(this.#listComponent, this.#eventsContainer);
+
     if (pointCount === 0) {
       this.#renderNoPoints();
       return;
     }
 
     this.#renderSort();
-    render(this.#listComponent, this.#eventsContainer);
+
     this.#renderPoints(points);
   }
 }

@@ -22,6 +22,7 @@ const UpdateType = {
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
   INIT: 'INIT',
+  FAILURE: 'FAILURE'
 };
 
 export { FilterType, SortType, UserAction, UpdateType };
