@@ -116,7 +116,6 @@ export default class EventsModel extends Observable {
       basePrice: point['base_price'],
     };
 
-    // Ненужные ключи мы удаляем
     delete adaptedPoint['date_from'];
     delete adaptedPoint['date_to'];
     delete adaptedPoint['base_price'];
