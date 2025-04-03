@@ -139,7 +139,7 @@ export default class EventsPresenter {
         this.#renderBoard();
         break;
       case UpdateType.MAJOR:
-        this.#clearBoard({ resetSortType: true }); // у них тут еще сброс счетчика
+        this.#clearBoard({ resetSortType: true });
         this.#renderBoard();
         break;
       case UpdateType.INIT:
