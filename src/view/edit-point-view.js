@@ -179,8 +179,6 @@ export default class PointEditView extends AbstractStatefulView {
     return createEditNewPointTemplate(this._state, this.#offers, this.#destinations, this.#createMode);
   }
 
-  // Перегружаем метод родителя removeElement,
-  // чтобы при удалении удалялся более не нужный календарь
   removeElement() {
     super.removeElement();
 
@@ -257,14 +255,14 @@ export default class PointEditView extends AbstractStatefulView {
     evt.preventDefault();
     this.updateElement({
       type: evt.target.value,
-      offers: [] // очистка выбранных офферов
+      offers: []
     });
   };
 
   #eventDestinationToogleHandler = (evt) => {
-    evt.preventDefault(); //ищем по названию оффер (ниже по коду)
+    evt.preventDefault();
     const newDestination = this.#destinations.find((x) => x.name === evt.target.value);
-    if (newDestination === undefined) { //добавляет невозможность ввести что угодно в поле
+    if (newDestination === undefined) {
       const inputElement = this.element.querySelector('.event__input--destination');
       inputElement.value = inputElement.dataset.destinationName;
       return;
@@ -277,7 +275,7 @@ export default class PointEditView extends AbstractStatefulView {
   #eventOffersSelectHandler = (evt) => {
     evt.preventDefault();
     const formData = new FormData(this.element.querySelector('form'));
-    this._setState({ //ставим _setState
+    this._setState({
       offers: formData.getAll('offers')
     });
   };

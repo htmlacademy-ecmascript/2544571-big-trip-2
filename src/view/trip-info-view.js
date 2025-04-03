@@ -25,11 +25,9 @@ function createNewTripInfoTemplate(eventsModel) {
   const lastPointName = uniqDestinationsNames.length > 1 ? `&mdash; ${uniqDestinationsNames[uniqDestinationsNames.length - 1]}` : '';
   const dots = uniqDestinationsNames.length > 3 ? '&mdash; ...' : '';
 
-  // const isMonthYearEqual = (firstDate, secondDate) => dayjs(firstDate).format('MM YYYY') === dayjs(secondDate).format('MM YYYY');
   const startDate = sortedPoints[0].dateFrom;
-  const endDate = sortedPoints[sortedPoints.length - 1].dateTo; // (выше и ниже - оказалось, что для тестов не надо убирать месяц у первой даты)
+  const endDate = sortedPoints[sortedPoints.length - 1].dateTo;
 
-  // const humanizedStartDate = isMonthYearEqual(startDate, endDate) ? dayjs(startDate).format('D') : dayjs(startDate).format('D MMM');
   const humanizedStartDate = dayjs(startDate).format('D MMM');
   const humanizedEndDate = dayjs(endDate).format('D MMM');
 

@@ -8,8 +8,7 @@ import PointsApiService from './points-api-service.js';
 import TripInfoPresenter from './presenter/trip-info-presenter.js';
 
 const AUTHORIZATION = 'Basic cooperfirewalk3';
-// const END_POINT = 'https://22.objects.htmlacademy.pro/big-trip';
-const END_POINT = 'https://23.objects.htmlacademy.pro/big-trip'; // адрес для тестов
+const END_POINT = 'https://22.objects.htmlacademy.pro/big-trip';
 
 
 const siteHeaderElement = document.querySelector('.trip-main');

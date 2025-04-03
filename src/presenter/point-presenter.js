@@ -137,7 +137,7 @@ export default class PointPresenter {
     }
   };
 
-  #handleFormClose = () => { //делаем по аналогии с escKeyDownHandler
+  #handleFormClose = () => {
     this.#pointEditComponent.reset(this.#point);
     this.#replaceFormToCard();
   };

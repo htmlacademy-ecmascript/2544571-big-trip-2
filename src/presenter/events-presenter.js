@@ -75,7 +75,7 @@ export default class EventsPresenter {
       case SortType.TIME:
         return filteredPoints.sort(sortPointTime);
     }
-    return filteredPoints; // на всякий случай оставим
+    return filteredPoints;
   }
 
   init() {
@@ -90,9 +90,6 @@ export default class EventsPresenter {
       remove(this.#noPointsComponent);
     }
   }
-
-  // #handleLoadMoreButtonClick = () => {
-  // здвесь у них обработчик кнопки "показать еще"
 
   #handleModeChange = () => {
     this.#newPointPresenter.destroy();
@@ -208,10 +205,7 @@ export default class EventsPresenter {
     render(this.#noPointsComponent, this.#eventsContainer, RenderPosition.AFTERBEGIN);
   }
 
-  //здесь в демке рендер кнопки "покзатать еще"
-
   #clearBoard({ resetSortType = false } = {}) {
-    // здесь у них переменная для счетчика задач
 
     this.#newPointPresenter.destroy();
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
@@ -220,13 +214,10 @@ export default class EventsPresenter {
     remove(this.#sortComponent);
     remove(this.#loadingComponent);
     remove(this.#failedLoadComponent);
-    // в демке здесь удаление кнопки "загрузить еще"
 
     if (this.#noPointsComponent) {
       remove(this.#noPointsComponent);
     }
-
-    //Здесь в демке условие на счетчик задач
 
     if (resetSortType) {
       this.#currentSortType = SortType.DAY;
@@ -234,7 +225,6 @@ export default class EventsPresenter {
   }
 
   #renderBoard() {
-    // здесь они рисуют доп элемент, который нам не нужен
 
     if (this.#isFailLoad) {
       this.#renderFailedLoad();
